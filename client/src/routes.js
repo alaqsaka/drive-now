@@ -9,6 +9,7 @@ import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
+import MobilForm from './pages/mobil/MobilForm';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +41,11 @@ export default function Router() {
     {
       path: '*',
       element: <Navigate to="/404" replace />,
+    },
+    {
+      path: '/dashboard/mobil',
+      element: <DashboardLayout />,
+      children: [{ path: 'add', element: <MobilForm /> }],
     },
   ]);
 
