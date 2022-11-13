@@ -23,12 +23,12 @@ export default function ProductsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Products | Minimal UI </title>
+        <title> Dashboard: Mobil | DriveNow </title>
       </Helmet>
 
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          Mobil
         </Typography>
 
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
