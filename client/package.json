@@ -45,6 +45,7 @@
     "@mui/base": "^5.0.0-alpha.106",
     "@mui/lab": "^5.0.0-alpha.103",
     "@mui/material": "^5.10.9",
+    "@mui/x-data-grid": "^5.17.12",
     "apexcharts": "^3.36.0",
     "change-case": "^4.1.2",
     "date-fns": "^2.29.3",

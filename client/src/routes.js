@@ -10,6 +10,7 @@ import Page404 from "./pages/Page404";
 import ProductsPage from "./pages/ProductsPage";
 import DashboardAppPage from "./pages/DashboardAppPage";
 import MobilForm from "./pages/mobil/MobilForm";
+import Mobil from "./pages/mobil/Mobil";
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +23,7 @@ export default function Router() {
 				{ element: <Navigate to="/dashboard/app" />, index: true },
 				{ path: "app", element: <DashboardAppPage /> },
 				{ path: "user", element: <UserPage /> },
-				{ path: "mobil", element: <ProductsPage /> },
+				{ path: "mobil", element: <Mobil /> },
 				{ path: "blog", element: <BlogPage /> }
 			]
 		},
