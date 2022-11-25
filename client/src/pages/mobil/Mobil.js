@@ -21,6 +21,8 @@ import {
 	IconButton,
 	TableContainer,
 	TablePagination,
+	Menu,
+	Link as MaterialLink,
 } from "@mui/material";
 // import {  } from "@";
 import { withStyles } from "@mui/styles";
@@ -34,7 +36,7 @@ import { UserListHead, UserListToolbar } from "../../sections/@dashboard/user";
 import cars from "../../_mock/cars";
 // mock
 import USERLIST from "../../_mock/user";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +52,14 @@ const TABLE_HEAD = [
 	{ id: "price", label: "Price", alignRight: false },
 	{ id: "lokasi", label: "Lokasi", alignRight: false },
 	{ id: "jumlah", label: "Jumlah", alignRight: false },
-	{ id: "", label: "Action" },
+	{
+		id: "",
+		label: "Action",
+		sx: {
+			width: "13%",
+			textAlign: "center",
+		},
+	},
 ];
 
 // ----------------------------------------------------------------------
@@ -225,45 +234,18 @@ export default function UserPage() {
 												<StyledTableCell align="left">
 													{lokasi.length > 0 && lokasi.map((item) => <div>{item.jumlah}</div>)}
 												</StyledTableCell>
-												<StyledTableCell align="left">
-													<IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-														<Iconify icon="eva:more-vertical-fill" />
+												<StyledTableCell align="left" sx={{ width: "fit-content" }}>
+													<Link to={`detail/${slug}`}>
+														<IconButton component={MaterialLink}>
+															<Iconify icon="ic:outline-remove-red-eye" />
+														</IconButton>
+													</Link>
+													<IconButton>
+														<Iconify icon="eva:edit-fill" color="warning.main" />
 													</IconButton>
-
-													<Popover
-														open={Boolean(open)}
-														anchorEl={open}
-														onClose={handleCloseMenu}
-														anchorOrigin={{ vertical: "top", horizontal: "left" }}
-														transformOrigin={{ vertical: "top", horizontal: "right" }}
-														PaperProps={{
-															sx: {
-																p: 1,
-																width: 140,
-																"& .MuiMenuItem-root": {
-																	px: 1,
-																	typography: "body2",
-																	borderRadius: 0.75,
-																},
-															},
-														}}
-													>
-														<NavLink to={`detail/${slug}`} style={{ textDecoration: "none", color: "black" }}>
-															<MenuItem>
-																<Iconify icon="ic:outline-remove-red-eye" sx={{ mr: 2 }} />
-																View
-															</MenuItem>
-														</NavLink>
-														<MenuItem sx={{ color: "warning.main" }}>
-															<Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-															Edit
-														</MenuItem>
-
-														<MenuItem sx={{ color: "error.main" }}>
-															<Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-															Delete
-														</MenuItem>
-													</Popover>
+													<IconButton>
+														<Iconify icon="eva:trash-2-outline" color="error.main" />
+													</IconButton>
 												</StyledTableCell>
 											</TableRow>
 										);

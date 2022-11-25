@@ -22,6 +22,7 @@ const cars = [...Array(12)].map((_, index) => {
 
 	return {
 		id: faker.datatype.number(100),
+		slug: CAR_NAME[index].toLowerCase().split(" ").join("-"),
 		cover: `/assets/images/products/product_${setIndex}.jpg`,
 		name: CAR_NAME[index],
 		price: faker.datatype.number({ min: 4, max: 99, precision: 0.01 }),
@@ -44,7 +45,6 @@ const cars = [...Array(12)].map((_, index) => {
 			},
 		],
 		jumlahKursi: 8,
-		slug: CAR_NAME[index].toLowerCase().split(" ").join("-"),
 	};
 });
 

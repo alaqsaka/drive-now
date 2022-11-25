@@ -7,7 +7,6 @@ import BlogPage from "./pages/BlogPage";
 import UserPage from "./pages/UserPage";
 import LoginPage from "./pages/LoginPage";
 import Page404 from "./pages/Page404";
-import ProductsPage from "./pages/ProductsPage";
 import DashboardAppPage from "./pages/DashboardAppPage";
 import MobilForm from "./pages/mobil/MobilForm";
 import Mobil from "./pages/mobil/Mobil";
