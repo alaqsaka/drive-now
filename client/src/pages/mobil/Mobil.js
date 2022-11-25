@@ -20,9 +20,12 @@ import {
 	Typography,
 	IconButton,
 	TableContainer,
-	TablePagination
+	TablePagination,
 } from "@mui/material";
+// import {  } from "@";
+import { withStyles } from "@mui/styles";
 // components
+
 import Label from "../../components/label";
 import Iconify from "../../components/iconify";
 import Scrollbar from "../../components/scrollbar";
@@ -31,9 +34,15 @@ import { UserListHead, UserListToolbar } from "../../sections/@dashboard/user";
 import cars from "../../_mock/cars";
 // mock
 import USERLIST from "../../_mock/user";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 // ----------------------------------------------------------------------
+
+const StyledTableCell = withStyles({
+	root: {
+		fontSize: "16px",
+	},
+})(TableCell);
 
 const TABLE_HEAD = [
 	{ id: "id", label: "ID", alignRight: false },
@@ -41,7 +50,7 @@ const TABLE_HEAD = [
 	{ id: "price", label: "Price", alignRight: false },
 	{ id: "lokasi", label: "Lokasi", alignRight: false },
 	{ id: "jumlah", label: "Jumlah", alignRight: false },
-	{ id: "" }
+	{ id: "", label: "Action" },
 ];
 
 // ----------------------------------------------------------------------
@@ -173,7 +182,13 @@ export default function UserPage() {
 
 					<Scrollbar>
 						<TableContainer sx={{ minWidth: 800 }}>
-							<Table>
+							<Table
+								sx={{
+									"& .MuiTable-root": {
+										color: "red",
+									},
+								}}
+							>
 								<UserListHead
 									order={order}
 									orderBy={orderBy}
@@ -183,50 +198,79 @@ export default function UserPage() {
 									onRequestSort={handleRequestSort}
 									onSelectAllClick={handleSelectAllClick}
 								/>
-								<TableBody
-									sx={{
-										"&.MuiTable-root": {
-											color: "red"
-										}
-									}}
-								>
+								<TableBody>
 									{filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-										const { id, name, price, detail, lokasi } = row;
+										const { id, name, price, detail, lokasi, slug } = row;
 										const selectedUser = selected.indexOf(name) !== -1;
 
 										return (
 											<TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
-												<TableCell padding="checkbox">
+												<StyledTableCell padding="checkbox">
 													<Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
-												</TableCell>
+												</StyledTableCell>
 
-												<TableCell component="th" scope="row" padding="none">
+												<StyledTableCell component="th" scope="row" padding="none">
 													<Stack direction="row" alignItems="center" spacing={2}>
 														<Typography variant="subtitle2" noWrap>
 															{id}
 														</Typography>
 													</Stack>
-												</TableCell>
+												</StyledTableCell>
 
-												<TableCell align="left">{name}</TableCell>
-												<TableCell align="left">{price}</TableCell>
-												<TableCell align="left">
+												<StyledTableCell align="left">{name}</StyledTableCell>
+												<StyledTableCell align="left">{price}</StyledTableCell>
+												<StyledTableCell align="left">
 													{lokasi.length > 0 && lokasi.map((item) => <div>{item.nama}</div>)}
-												</TableCell>
-												<TableCell align="left">
+												</StyledTableCell>
+												<StyledTableCell align="left">
 													{lokasi.length > 0 && lokasi.map((item) => <div>{item.jumlah}</div>)}
-												</TableCell>
-												<TableCell align="center">
+												</StyledTableCell>
+												<StyledTableCell align="left">
 													<IconButton size="large" color="inherit" onClick={handleOpenMenu}>
 														<Iconify icon="eva:more-vertical-fill" />
 													</IconButton>
-												</TableCell>
+
+													<Popover
+														open={Boolean(open)}
+														anchorEl={open}
+														onClose={handleCloseMenu}
+														anchorOrigin={{ vertical: "top", horizontal: "left" }}
+														transformOrigin={{ vertical: "top", horizontal: "right" }}
+														PaperProps={{
+															sx: {
+																p: 1,
+																width: 140,
+																"& .MuiMenuItem-root": {
+																	px: 1,
+																	typography: "body2",
+																	borderRadius: 0.75,
+																},
+															},
+														}}
+													>
+														<NavLink to={`detail/${slug}`} style={{ textDecoration: "none", color: "black" }}>
+															<MenuItem>
+																<Iconify icon="ic:outline-remove-red-eye" sx={{ mr: 2 }} />
+																View
+															</MenuItem>
+														</NavLink>
+														<MenuItem sx={{ color: "warning.main" }}>
+															<Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
+															Edit
+														</MenuItem>
+
+														<MenuItem sx={{ color: "error.main" }}>
+															<Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
+															Delete
+														</MenuItem>
+													</Popover>
+												</StyledTableCell>
 											</TableRow>
 										);
 									})}
 									{emptyRows > 0 && (
 										<TableRow style={{ height: 53 * emptyRows }}>
-											<TableCell colSpan={6} />
+											<StyledTableCell colSpan={6} />
 										</TableRow>
 									)}
 								</TableBody>
@@ -237,7 +281,7 @@ export default function UserPage() {
 											<TableCell align="center" colSpan={6} sx={{ py: 3 }}>
 												<Paper
 													sx={{
-														textAlign: "center"
+														textAlign: "center",
 													}}
 												>
 													<Typography variant="h6" paragraph>
@@ -268,35 +312,6 @@ export default function UserPage() {
 					/>
 				</Card>
 			</Container>
-
-			<Popover
-				open={Boolean(open)}
-				anchorEl={open}
-				onClose={handleCloseMenu}
-				anchorOrigin={{ vertical: "top", horizontal: "left" }}
-				transformOrigin={{ vertical: "top", horizontal: "right" }}
-				PaperProps={{
-					sx: {
-						p: 1,
-						width: 140,
-						"& .MuiMenuItem-root": {
-							px: 1,
-							typography: "body2",
-							borderRadius: 0.75
-						}
-					}
-				}}
-			>
-				<MenuItem>
-					<Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-					Edit
-				</MenuItem>
-
-				<MenuItem sx={{ color: "error.main" }}>
-					<Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-					Delete
-				</MenuItem>
-			</Popover>
 		</>
 	);
 }

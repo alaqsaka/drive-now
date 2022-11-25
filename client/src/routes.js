@@ -11,6 +11,7 @@ import ProductsPage from "./pages/ProductsPage";
 import DashboardAppPage from "./pages/DashboardAppPage";
 import MobilForm from "./pages/mobil/MobilForm";
 import Mobil from "./pages/mobil/Mobil";
+import MobilDetails from "./pages/mobil/MobilDetails";
 
 // ----------------------------------------------------------------------
 
@@ -24,30 +25,36 @@ export default function Router() {
 				{ path: "app", element: <DashboardAppPage /> },
 				{ path: "user", element: <UserPage /> },
 				{ path: "mobil", element: <Mobil /> },
-				{ path: "blog", element: <BlogPage /> }
-			]
+				{ path: "blog", element: <BlogPage /> },
+			],
 		},
 		{
 			path: "login",
-			element: <LoginPage />
+			element: <LoginPage />,
 		},
 		{
 			element: <SimpleLayout />,
 			children: [
 				{ element: <Navigate to="/dashboard/app" />, index: true },
 				{ path: "404", element: <Page404 /> },
-				{ path: "*", element: <Navigate to="/404" /> }
-			]
+				{ path: "*", element: <Navigate to="/404" /> },
+			],
 		},
 		{
 			path: "*",
-			element: <Navigate to="/404" replace />
+			element: <Navigate to="/404" replace />,
 		},
 		{
 			path: "/dashboard/mobil",
 			element: <DashboardLayout />,
-			children: [{ path: "add", element: <MobilForm /> }]
-		}
+			children: [
+				{ path: "add", element: <MobilForm /> },
+				{
+					path: "detail/:slug",
+					element: <MobilDetails />,
+				},
+			],
+		},
 	]);
 
 	return routes;

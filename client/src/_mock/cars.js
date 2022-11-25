@@ -14,7 +14,7 @@ const CAR_NAME = [
 	"Tesla Model T",
 	"Tesla Model X",
 	"Tesla Model S",
-	"Hyundai Ioniq 5"
+	"Hyundai Ioniq 5",
 ];
 
 const cars = [...Array(12)].map((_, index) => {
@@ -30,20 +30,21 @@ const cars = [...Array(12)].map((_, index) => {
 			{
 				id: 1,
 				nama: "Bandung",
-				jumlah: 10
+				jumlah: 10,
 			},
 			{
 				id: 2,
 				nama: "Jakarta",
-				jumlah: 5
+				jumlah: 5,
 			},
 			{
 				id: 3,
 				nama: "Jogja",
-				jumlah: 8
-			}
+				jumlah: 8,
+			},
 		],
-		jumlahKursi: 8
+		jumlahKursi: 8,
+		slug: CAR_NAME[index].toLowerCase().split(" ").join("-"),
 	};
 });
 
