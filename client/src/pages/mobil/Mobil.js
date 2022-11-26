@@ -171,13 +171,16 @@ export default function UserPage() {
 	const isNotFound = !filteredUsers.length && !!filterName;
 
 	const confirm = useConfirm();
-	const handleClickDelete = () => {
+	const handleClickDelete = (namaModel) => {
 		confirm({
 			description: "",
 			title: "",
 			content: (
 				<>
-					<Box>INI BOX CONTENT</Box>
+					<Box>
+						<Typography variant="h5">Yakin menghapus mobil {namaModel} ini?</Typography>
+						<Typography variant="body1">Data yang sudah dihapus tidak akan dipulihkan kembali</Typography>
+					</Box>
 				</>
 			),
 		})
@@ -266,7 +269,7 @@ export default function UserPage() {
 															<Iconify icon="eva:edit-fill" color="warning.main" />
 														</IconButton>
 													</Link>
-													<IconButton onClick={handleClickDelete}>
+													<IconButton onClick={handleClickDelete(name)}>
 														<Iconify icon="eva:trash-2-outline" color="error.main" />
 													</IconButton>
 												</StyledTableCell>
