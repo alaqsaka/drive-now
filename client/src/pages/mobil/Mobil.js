@@ -23,11 +23,12 @@ import {
 	TablePagination,
 	Menu,
 	Link as MaterialLink,
+	DialogContent,
 } from "@mui/material";
 // import {  } from "@";
 import { withStyles } from "@mui/styles";
 // components
-
+import { useConfirm } from "material-ui-confirm";
 import Label from "../../components/label";
 import Iconify from "../../components/iconify";
 import Scrollbar from "../../components/scrollbar";
@@ -37,6 +38,7 @@ import cars from "../../_mock/cars";
 // mock
 import USERLIST from "../../_mock/user";
 import { NavLink, Link } from "react-router-dom";
+import { Box } from "@mui/system";
 
 // ----------------------------------------------------------------------
 
@@ -48,8 +50,8 @@ const StyledTableCell = withStyles({
 
 const TABLE_HEAD = [
 	{ id: "id", label: "ID", alignRight: false },
-	{ id: "name", label: "Name", alignRight: false },
-	{ id: "price", label: "Price", alignRight: false },
+	{ id: "name", label: "Nama Model", alignRight: false },
+	{ id: "price", label: "Harga Sewa Per Hari", alignRight: false },
 	{ id: "lokasi", label: "Lokasi", alignRight: false },
 	{ id: "jumlah", label: "Jumlah", alignRight: false },
 	{
@@ -168,6 +170,25 @@ export default function UserPage() {
 
 	const isNotFound = !filteredUsers.length && !!filterName;
 
+	const confirm = useConfirm();
+	const handleClickDelete = () => {
+		confirm({
+			description: "",
+			title: "",
+			content: (
+				<>
+					<Box>INI BOX CONTENT</Box>
+				</>
+			),
+		})
+			.then(() => {
+				console.log("Delete");
+			})
+			.catch(() => {
+				console.log("Cancel delete");
+			});
+	};
+
 	return (
 		<>
 			<Helmet>
@@ -245,7 +266,7 @@ export default function UserPage() {
 															<Iconify icon="eva:edit-fill" color="warning.main" />
 														</IconButton>
 													</Link>
-													<IconButton>
+													<IconButton onClick={handleClickDelete}>
 														<Iconify icon="eva:trash-2-outline" color="error.main" />
 													</IconButton>
 												</StyledTableCell>
