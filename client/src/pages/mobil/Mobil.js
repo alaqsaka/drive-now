@@ -240,9 +240,11 @@ export default function UserPage() {
 															<Iconify icon="ic:outline-remove-red-eye" />
 														</IconButton>
 													</Link>
-													<IconButton>
-														<Iconify icon="eva:edit-fill" color="warning.main" />
-													</IconButton>
+													<Link to={`edit/${id}`}>
+														<IconButton>
+															<Iconify icon="eva:edit-fill" color="warning.main" />
+														</IconButton>
+													</Link>
 													<IconButton>
 														<Iconify icon="eva:trash-2-outline" color="error.main" />
 													</IconButton>

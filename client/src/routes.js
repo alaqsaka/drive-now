@@ -48,6 +48,7 @@ export default function Router() {
 			element: <DashboardLayout />,
 			children: [
 				{ path: "add", element: <MobilForm /> },
+				{ path: "edit/:carId", element: <MobilForm /> },
 				{
 					path: "detail/:slug",
 					element: <MobilDetails />,

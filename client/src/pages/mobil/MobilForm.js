@@ -15,13 +15,17 @@ import {
 } from "@mui/material";
 import { InputUnstyled } from "@mui/base";
 import React from "react";
+import { useParams } from "react-router-dom";
 // import Card from "../../theme/overrides/Card";
 
 function MobilForm() {
+	const { carId } = useParams();
+	const editMode = Boolean(carId);
+
 	return (
 		<Container>
 			<Typography variant="h4" gutterBottom>
-				Tambah Mobil
+				{editMode ? "Edit Mobil" : "Tambah Mobil"}
 			</Typography>
 
 			<Card>
@@ -110,7 +114,7 @@ function MobilForm() {
 						</Grid>
 						<Grid item xs={12} sm={6}>
 							<Button variant="contained" size="large" fullWidth>
-								Buat data mobil
+								{editMode ? "Edit Data Mobil" : "Buat Data Mobil"}
 							</Button>
 						</Grid>
 					</Grid>
