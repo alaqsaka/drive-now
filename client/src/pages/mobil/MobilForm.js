@@ -10,7 +10,8 @@ import {
 	InputLabel,
 	Select,
 	MenuItem,
-	Button
+	Button,
+	Container,
 } from "@mui/material";
 import { InputUnstyled } from "@mui/base";
 import React from "react";
@@ -18,7 +19,7 @@ import React from "react";
 
 function MobilForm() {
 	return (
-		<Box>
+		<Container>
 			<Typography variant="h4" gutterBottom>
 				Tambah Mobil
 			</Typography>
@@ -115,7 +116,7 @@ function MobilForm() {
 					</Grid>
 				</CardContent>
 			</Card>
-		</Box>
+		</Container>
 	);
 }
 
