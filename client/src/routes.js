@@ -11,6 +11,7 @@ import DashboardAppPage from "./pages/DashboardAppPage";
 import MobilForm from "./pages/mobil/MobilForm";
 import Mobil from "./pages/mobil/Mobil";
 import MobilDetails from "./pages/mobil/MobilDetails";
+import PenggunaDetails from "./pages/pengguna/PenggunaDetails";
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,16 @@ export default function Router() {
 				{
 					path: "detail/:slug",
 					element: <MobilDetails />,
+				},
+			],
+		},
+		{
+			path: "/dashboard/user",
+			element: <DashboardLayout />,
+			children: [
+				{
+					path: "detail/:userId",
+					element: <PenggunaDetails />,
 				},
 			],
 		},

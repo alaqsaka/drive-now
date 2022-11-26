@@ -125,7 +125,7 @@ const MobilDetails = () => {
 							Daftar Transaksi {slug.replace("-", " ")}
 						</Typography>
 
-						<TableContainer component={Paper}>
+						<TableContainer component={Paper} variant="outlined" sx={{ border: "1px solid", borderColor: "grey.400" }}>
 							<Table sx={{ minWidth: 650 }} aria-label="simple table">
 								<TableHead>
 									<TableRow>

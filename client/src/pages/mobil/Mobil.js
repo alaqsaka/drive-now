@@ -97,6 +97,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
 	console.log("Cars ", cars);
+	const confirm = useConfirm();
 	const [open, setOpen] = useState(null);
 
 	const [page, setPage] = useState(0);
@@ -170,7 +171,6 @@ export default function UserPage() {
 
 	const isNotFound = !filteredUsers.length && !!filterName;
 
-	const confirm = useConfirm();
 	const handleClickDelete = (namaModel) => {
 		confirm({
 			description: "",
@@ -233,7 +233,7 @@ export default function UserPage() {
 								/>
 								<TableBody>
 									{filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-										const { id, name, price, detail, lokasi, slug } = row;
+										const { id, name, price, lokasi, slug } = row;
 										const selectedUser = selected.indexOf(name) !== -1;
 
 										return (
@@ -269,7 +269,7 @@ export default function UserPage() {
 															<Iconify icon="eva:edit-fill" color="warning.main" />
 														</IconButton>
 													</Link>
-													<IconButton onClick={handleClickDelete(name)}>
+													<IconButton onClick={() => handleClickDelete(name)}>
 														<Iconify icon="eva:trash-2-outline" color="error.main" />
 													</IconButton>
 												</StyledTableCell>
