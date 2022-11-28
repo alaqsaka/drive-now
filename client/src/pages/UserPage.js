@@ -20,7 +20,9 @@ import {
 	Typography,
 	IconButton,
 	TableContainer,
-	TablePagination
+	TablePagination,
+	Link as MaterialLink,
+	Box,
 } from "@mui/material";
 // components
 import Label from "../components/label";
@@ -30,16 +32,29 @@ import Scrollbar from "../components/scrollbar";
 import { UserListHead, UserListToolbar } from "../sections/@dashboard/user";
 // mock
 import USERLIST from "../_mock/user";
+import { withStyles } from "@mui/styles";
+import { Link } from "react-router-dom";
+import { useConfirm } from "material-ui-confirm";
 
 // ----------------------------------------------------------------------
+const StyledTableCell = withStyles({
+	root: {
+		fontSize: "16px",
+	},
+})(TableCell);
 
 const TABLE_HEAD = [
-	{ id: "name", label: "Name", alignRight: false },
-	{ id: "company", label: "Company", alignRight: false },
-	{ id: "role", label: "Role", alignRight: false },
-	{ id: "isVerified", label: "Verified", alignRight: false },
-	{ id: "status", label: "Status", alignRight: false },
-	{ id: "" }
+	{ id: "name", label: "Nama Lengkap", alignRight: false },
+	{ id: "Email", label: "Email", alignRight: false },
+	{ id: "Phone", label: "Nomor Telepon", alignRight: false },
+	{
+		id: "",
+		label: "Action",
+		sx: {
+			width: "13%",
+			textAlign: "center",
+		},
+	},
 ];
 
 // ----------------------------------------------------------------------
@@ -75,7 +90,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
 	const [open, setOpen] = useState(null);
-
+	const confirm = useConfirm();
 	const [page, setPage] = useState(0);
 
 	const [order, setOrder] = useState("asc");
@@ -146,6 +161,27 @@ export default function UserPage() {
 
 	const isNotFound = !filteredUsers.length && !!filterName;
 
+	const handleClickDelete = (id) => {
+		confirm({
+			description: "",
+			title: "",
+			content: (
+				<>
+					<Box>
+						<Typography variant="h5">Yakin menghapus user {id}?</Typography>
+						<Typography variant="body1">Data yang sudah dihapus tidak akan dipulihkan kembali</Typography>
+					</Box>
+				</>
+			),
+		})
+			.then(() => {
+				console.log("Delete");
+			})
+			.catch(() => {
+				console.log("Cancel delete");
+			});
+	};
+
 	return (
 		<>
 			<Helmet>
@@ -179,45 +215,49 @@ export default function UserPage() {
 								/>
 								<TableBody>
 									{filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-										const { id, name, role, status, company, avatarUrl, isVerified } = row;
+										const { id, name, phone, email, avatarUrl } = row;
 										const selectedUser = selected.indexOf(name) !== -1;
 
 										return (
 											<TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
-												<TableCell padding="checkbox">
+												<StyledTableCell padding="checkbox">
 													<Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
-												</TableCell>
+												</StyledTableCell>
 
-												<TableCell component="th" scope="row" padding="none">
+												<StyledTableCell component="th" scope="row" padding="none">
 													<Stack direction="row" alignItems="center" spacing={2}>
 														<Avatar alt={name} src={avatarUrl} />
-														<Typography variant="subtitle2" noWrap>
+														<Typography variant="subtitle1" noWrap>
 															{name}
 														</Typography>
 													</Stack>
-												</TableCell>
+												</StyledTableCell>
 
-												<TableCell align="left">{company}</TableCell>
+												<StyledTableCell align="left">{email}</StyledTableCell>
 
-												<TableCell align="left">{role}</TableCell>
+												<StyledTableCell align="left">{phone}</StyledTableCell>
 
-												<TableCell align="left">{isVerified ? "Yes" : "No"}</TableCell>
-
-												<TableCell align="left">
-													<Label color={(status === "banned" && "error") || "success"}>{sentenceCase(status)}</Label>
-												</TableCell>
-
-												<TableCell align="right">
-													<IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-														<Iconify icon="eva:more-vertical-fill" />
+												<StyledTableCell align="left" sx={{ width: "fit-content" }}>
+													<Link to={`detail/${id}`}>
+														<IconButton component={MaterialLink}>
+															<Iconify icon="ic:outline-remove-red-eye" />
+														</IconButton>
+													</Link>
+													<Link to={`edit/${id}`}>
+														<IconButton>
+															<Iconify icon="eva:edit-fill" color="warning.main" />
+														</IconButton>
+													</Link>
+													<IconButton onClick={() => handleClickDelete(name)}>
+														<Iconify icon="eva:trash-2-outline" color="error.main" />
 													</IconButton>
-												</TableCell>
+												</StyledTableCell>
 											</TableRow>
 										);
 									})}
 									{emptyRows > 0 && (
 										<TableRow style={{ height: 53 * emptyRows }}>
-											<TableCell colSpan={6} />
+											<StyledTableCell colSpan={6} />
 										</TableRow>
 									)}
 								</TableBody>
@@ -228,7 +268,7 @@ export default function UserPage() {
 											<TableCell align="center" colSpan={6} sx={{ py: 3 }}>
 												<Paper
 													sx={{
-														textAlign: "center"
+														textAlign: "center",
 													}}
 												>
 													<Typography variant="h6" paragraph>
@@ -274,9 +314,9 @@ export default function UserPage() {
 						"& .MuiMenuItem-root": {
 							px: 1,
 							typography: "body2",
-							borderRadius: 0.75
-						}
-					}
+							borderRadius: 0.75,
+						},
+					},
 				}}
 			>
 				<MenuItem>

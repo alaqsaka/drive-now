@@ -11,19 +11,21 @@ import {
 	Typography,
 	Tab,
 	Box,
-	TableCell,
 	TableRow,
 	TableBody,
 	TableHead,
 	TableContainer,
 	Table,
 	Chip,
+	Link as MaterialLink,
+	IconButton,
 } from "@mui/material";
 import userImg from "../../assets/images/users/avatar_13.jpg";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import DNTableCell from "src/components/DNTableCell";
 import Iconify from "src/components/iconify";
 function createData(id, nama, email, telepon, tanggal, status, total) {
 	return { id, nama, email, telepon, tanggal, status, total };
@@ -177,35 +179,46 @@ const PenggunaDetails = () => {
 									<Table sx={{ minWidth: 650 }} aria-label="simple table">
 										<TableHead>
 											<TableRow>
-												<TableCell align="left">ID Transaksi</TableCell>
-												<TableCell align="left">Nama</TableCell>
-												<TableCell align="left">Email</TableCell>
-												<TableCell align="left">Telepon</TableCell>
-												<TableCell align="left">Tanggal</TableCell>
-												<TableCell align="left">Status Pembayaran</TableCell>
-												<TableCell align="left">Total</TableCell>
+												<DNTableCell align="left">ID Transaksi</DNTableCell>
+												<DNTableCell align="left">Nama</DNTableCell>
+												<DNTableCell align="left">Email</DNTableCell>
+												<DNTableCell align="left">Telepon</DNTableCell>
+												<DNTableCell align="left">Tanggal</DNTableCell>
+												<DNTableCell align="left">Status Pembayaran</DNTableCell>
+												<DNTableCell align="left">Total</DNTableCell>
+												<DNTableCell align="left">Action</DNTableCell>
 											</TableRow>
 										</TableHead>
 										<TableBody>
 											{rows.map((row) => (
 												<TableRow key={row.name} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-													<TableCell align="left">{row.id}</TableCell>
-													<TableCell align="left">{row.nama}</TableCell>
-													<TableCell align="left">{row.email}</TableCell>
-													<TableCell align="left">{row.telepon}</TableCell>
-													<TableCell align="left">{row.tanggal}</TableCell>
-													<TableCell align="left">
+													<DNTableCell align="left">{row.id}</DNTableCell>
+													<DNTableCell align="left">{row.nama}</DNTableCell>
+													<DNTableCell align="left">{row.email}</DNTableCell>
+													<DNTableCell align="left">{row.telepon}</DNTableCell>
+													<DNTableCell align="left">{row.tanggal}</DNTableCell>
+													<DNTableCell align="left">
 														<Chip
 															sx={{
 																backgroundColor: badgeColor[row.status],
 																color: badgeColorText[row.status],
 																fontWeight: 600,
+																".MuiChip-icon": {
+																	color: badgeColorText[row.status],
+																},
 															}}
 															icon={<Iconify icon={iconStatus[row.status]} />}
 															label={row.status}
 														/>
-													</TableCell>
-													<TableCell align="left">IDR {row.total},00</TableCell>
+													</DNTableCell>
+													<DNTableCell align="left">IDR {row.total},00</DNTableCell>
+													<DNTableCell>
+														<Link to={`/transaction/detail/${row.id}`}>
+															<IconButton component={MaterialLink}>
+																<Iconify icon="ic:outline-remove-red-eye" />
+															</IconButton>
+														</Link>
+													</DNTableCell>
 												</TableRow>
 											))}
 										</TableBody>
