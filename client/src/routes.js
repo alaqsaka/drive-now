@@ -12,6 +12,7 @@ import MobilForm from "./pages/mobil/MobilForm";
 import Mobil from "./pages/mobil/Mobil";
 import MobilDetails from "./pages/mobil/MobilDetails";
 import PenggunaDetails from "./pages/pengguna/PenggunaDetails";
+import Transaksi from "./pages/transaksi/Transaksi";
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +27,7 @@ export default function Router() {
 				{ path: "user", element: <UserPage /> },
 				{ path: "mobil", element: <Mobil /> },
 				{ path: "blog", element: <BlogPage /> },
+				{ path: "transaksi", element: <Transaksi /> },
 			],
 		},
 		{
@@ -65,6 +67,10 @@ export default function Router() {
 					element: <PenggunaDetails />,
 				},
 			],
+		},
+		{
+			path: "/dashboard/transaksi",
+			element: <DashboardLayout />,
 		},
 	]);
 
