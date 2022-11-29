@@ -154,14 +154,14 @@ export default function UserPage() {
 
 	const isNotFound = !filteredUsers.length && !!filterName;
 
-	const handleClickDelete = (namaModel) => {
+	const handleClickDelete = (lokasi) => {
 		confirm({
 			description: "",
 			title: "",
 			content: (
 				<>
 					<Box>
-						<Typography variant="h5">Yakin menghapus mobil {namaModel} ini?</Typography>
+						<Typography variant="h5">Yakin menghapus lokasi {lokasi}?</Typography>
 						<Typography variant="body1">Data yang sudah dihapus tidak akan dipulihkan kembali</Typography>
 					</Box>
 				</>

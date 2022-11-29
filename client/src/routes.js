@@ -15,6 +15,7 @@ import PenggunaDetails from "./pages/pengguna/PenggunaDetails";
 import Transaksi from "./pages/transaksi/Transaksi";
 import Lokasi from "./pages/lokasi/Lokasi";
 import LokasiForm from "./pages/lokasi/LokasiForm";
+import LokasiDetails from "./pages/lokasi/LokasiDetails";
 
 // ----------------------------------------------------------------------
 
@@ -84,6 +85,7 @@ export default function Router() {
 					element: <LokasiForm />,
 				},
 				{ path: "edit/:lokasiId", element: <LokasiForm /> },
+				{ path: "detail/:lokasiId", element: <LokasiDetails /> },
 			],
 		},
 	]);
