@@ -237,7 +237,7 @@ export default function UserPage() {
 												</StyledTableCell>
 
 												<StyledTableCell align="left">{name}</StyledTableCell>
-												<StyledTableCell align="left">{price}</StyledTableCell>
+												<StyledTableCell align="left">IDR {price},00</StyledTableCell>
 												<StyledTableCell align="left">
 													{lokasi.length > 0 && lokasi.map((item) => <div>{item.nama}</div>)}
 												</StyledTableCell>

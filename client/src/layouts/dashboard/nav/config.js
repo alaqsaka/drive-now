@@ -22,6 +22,11 @@ const navConfig = [
 		icon: icon("ic_cart"),
 	},
 	{
+		title: "Lokasi",
+		path: "/dashboard/lokasi",
+		icon: icon("ic_map"),
+	},
+	{
 		title: "Transaksi",
 		path: "/dashboard/transaksi",
 		icon: icon("transaction"),

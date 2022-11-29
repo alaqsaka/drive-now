@@ -1,19 +1,15 @@
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
-import { sentenceCase } from "change-case";
 import { useState } from "react";
-// @mui
+
 import {
 	Card,
 	Table,
 	Stack,
 	Paper,
-	Avatar,
 	Button,
-	Popover,
 	Checkbox,
 	TableRow,
-	MenuItem,
 	TableBody,
 	TableCell,
 	Container,
@@ -22,22 +18,16 @@ import {
 	TableContainer,
 	TablePagination,
 	Link as MaterialLink,
-	Box,
-	Chip,
 } from "@mui/material";
-// components
+import { withStyles } from "@mui/styles";
+import { useConfirm } from "material-ui-confirm";
 import Iconify from "../../components/iconify";
 import Scrollbar from "../../components/scrollbar";
-// sections
 import { UserListHead, UserListToolbar } from "../../sections/@dashboard/user";
-// mock
-import TRANSACTIONLIST from "../../_mock/transaction";
-import { withStyles } from "@mui/styles";
+import lokasi from "src/_mock/lokasi";
 import { Link } from "react-router-dom";
-import { useConfirm } from "material-ui-confirm";
-import { badgeColor, badgeColorText, iconStatus } from "src/enums";
+import { Box } from "@mui/system";
 
-// ----------------------------------------------------------------------
 const StyledTableCell = withStyles({
 	root: {
 		fontSize: "16px",
@@ -45,11 +35,9 @@ const StyledTableCell = withStyles({
 })(TableCell);
 
 const TABLE_HEAD = [
-	{ id: "id", label: "Transaction ID", alignRight: false },
-	{ id: "name", label: "Nama Lengkap", alignRight: false },
-	{ id: "email", label: "Email", alignRight: false },
-	{ id: "phone", label: "Nomor Telepon", alignRight: false },
-	{ id: "status", label: "Status Pembayaran", alignRight: false },
+	{ id: "id", label: "ID", alignRight: false },
+	{ id: "name", label: "Nama Lokasi", alignRight: false },
+	{ id: "deskripsi", label: "Deskripsi", alignRight: false },
 	{
 		id: "",
 		label: "Action",
@@ -92,8 +80,9 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserPage() {
-	const [open, setOpen] = useState(null);
 	const confirm = useConfirm();
+	const [open, setOpen] = useState(null);
+
 	const [page, setPage] = useState(0);
 
 	const [order, setOrder] = useState("asc");
@@ -122,7 +111,7 @@ export default function UserPage() {
 
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
-			const newSelecteds = TRANSACTIONLIST.map((n) => n.name);
+			const newSelecteds = lokasi.map((n) => n.name);
 			setSelected(newSelecteds);
 			return;
 		}
@@ -158,20 +147,21 @@ export default function UserPage() {
 		setFilterName(event.target.value);
 	};
 
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - TRANSACTIONLIST.length) : 0;
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - lokasi.length) : 0;
 
-	const filteredUsers = applySortFilter(TRANSACTIONLIST, getComparator(order, orderBy), filterName);
+	const filteredUsers = applySortFilter(lokasi, getComparator(order, orderBy), filterName);
+	// const filteredUsers = cars;
 
 	const isNotFound = !filteredUsers.length && !!filterName;
 
-	const handleClickDelete = (id) => {
+	const handleClickDelete = (namaModel) => {
 		confirm({
 			description: "",
 			title: "",
 			content: (
 				<>
 					<Box>
-						<Typography variant="h5">Yakin menghapus user {id}?</Typography>
+						<Typography variant="h5">Yakin menghapus mobil {namaModel} ini?</Typography>
 						<Typography variant="body1">Data yang sudah dihapus tidak akan dipulihkan kembali</Typography>
 					</Box>
 				</>
@@ -188,17 +178,19 @@ export default function UserPage() {
 	return (
 		<>
 			<Helmet>
-				<title> Transaksi | DriveNow </title>
+				<title> Lokasi | DriveNow </title>
 			</Helmet>
 
 			<Container>
 				<Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
 					<Typography variant="h4" gutterBottom>
-						Transaksi
+						Lokasi
 					</Typography>
-					<Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-						Tambah Transaksi
-					</Button>
+					<Link to="/dashboard/lokasi/add" style={{ textDecoration: "none" }}>
+						<Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+							Tambah Lokasi Baru
+						</Button>
+					</Link>
 				</Stack>
 
 				<Card>
@@ -206,46 +198,44 @@ export default function UserPage() {
 
 					<Scrollbar>
 						<TableContainer sx={{ minWidth: 800 }}>
-							<Table>
+							<Table
+								sx={{
+									"& .MuiTable-root": {
+										color: "red",
+									},
+								}}
+							>
 								<UserListHead
 									order={order}
 									orderBy={orderBy}
 									headLabel={TABLE_HEAD}
-									rowCount={TRANSACTIONLIST.length}
+									rowCount={lokasi.length}
 									numSelected={selected.length}
 									onRequestSort={handleRequestSort}
 									onSelectAllClick={handleSelectAllClick}
 								/>
 								<TableBody>
 									{filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-										const { id, name, phone, email, status } = row;
+										const { id, name, deskripsi } = row;
 										const selectedUser = selected.indexOf(name) !== -1;
 
 										return (
-											<TableRow hover key={id} tabIndex={-1} selected={selectedUser}>
+											<TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
 												<StyledTableCell padding="checkbox">
 													<Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
 												</StyledTableCell>
-												<StyledTableCell>{id}</StyledTableCell>
+
 												<StyledTableCell component="th" scope="row" padding="none">
-													<Typography variant="subtitle1">{name}</Typography>
+													<Stack direction="row" alignItems="center" spacing={2}>
+														<Typography variant="subtitle2" noWrap>
+															{id}
+														</Typography>
+													</Stack>
 												</StyledTableCell>
-												<StyledTableCell align="left">{email}</StyledTableCell>
-												<StyledTableCell align="left">{phone}</StyledTableCell>
-												<StyledTableCell align="left">
-													<Chip
-														sx={{
-															backgroundColor: badgeColor[status],
-															color: badgeColorText[status],
-															fontWeight: 600,
-															".MuiChip-icon": {
-																color: badgeColorText[status],
-															},
-														}}
-														icon={<Iconify icon={iconStatus[status]} />}
-														label={status}
-													/>
-												</StyledTableCell>
+
+												<StyledTableCell align="left">{name}</StyledTableCell>
+												<StyledTableCell align="left">{deskripsi}</StyledTableCell>
+
 												<StyledTableCell align="left" sx={{ width: "fit-content" }}>
 													<Link to={`detail/${id}`}>
 														<IconButton component={MaterialLink}>
@@ -283,7 +273,6 @@ export default function UserPage() {
 													<Typography variant="h6" paragraph>
 														Not found
 													</Typography>
-
 													<Typography variant="body2">
 														No results found for &nbsp;
 														<strong>&quot;{filterName}&quot;</strong>.
@@ -301,7 +290,7 @@ export default function UserPage() {
 					<TablePagination
 						rowsPerPageOptions={[5, 10, 25]}
 						component="div"
-						count={TRANSACTIONLIST.length}
+						count={lokasi.length}
 						rowsPerPage={rowsPerPage}
 						page={page}
 						onPageChange={handleChangePage}
@@ -309,35 +298,6 @@ export default function UserPage() {
 					/>
 				</Card>
 			</Container>
-
-			<Popover
-				open={Boolean(open)}
-				anchorEl={open}
-				onClose={handleCloseMenu}
-				anchorOrigin={{ vertical: "top", horizontal: "left" }}
-				transformOrigin={{ vertical: "top", horizontal: "right" }}
-				PaperProps={{
-					sx: {
-						p: 1,
-						width: 140,
-						"& .MuiMenuItem-root": {
-							px: 1,
-							typography: "body2",
-							borderRadius: 0.75,
-						},
-					},
-				}}
-			>
-				<MenuItem>
-					<Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-					Edit
-				</MenuItem>
-
-				<MenuItem sx={{ color: "error.main" }}>
-					<Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-					Delete
-				</MenuItem>
-			</Popover>
 		</>
 	);
 }

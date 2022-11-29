@@ -13,6 +13,8 @@ import Mobil from "./pages/mobil/Mobil";
 import MobilDetails from "./pages/mobil/MobilDetails";
 import PenggunaDetails from "./pages/pengguna/PenggunaDetails";
 import Transaksi from "./pages/transaksi/Transaksi";
+import Lokasi from "./pages/lokasi/Lokasi";
+import LokasiForm from "./pages/lokasi/LokasiForm";
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +30,7 @@ export default function Router() {
 				{ path: "mobil", element: <Mobil /> },
 				{ path: "blog", element: <BlogPage /> },
 				{ path: "transaksi", element: <Transaksi /> },
+				{ path: "lokasi", element: <Lokasi /> },
 			],
 		},
 		{
@@ -71,6 +74,17 @@ export default function Router() {
 		{
 			path: "/dashboard/transaksi",
 			element: <DashboardLayout />,
+		},
+		{
+			path: "/dashboard/lokasi",
+			element: <DashboardLayout />,
+			children: [
+				{
+					path: "add",
+					element: <LokasiForm />,
+				},
+				{ path: "edit/:lokasiId", element: <LokasiForm /> },
+			],
 		},
 	]);
 
