@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const { User } = require("../../../models");
 const Validator = require("fastest-validator");
+const generateToken = require("../../../utils/generateToken");
 const v = new Validator();
 
 module.exports = async (req, res) => {
@@ -55,5 +56,6 @@ module.exports = async (req, res) => {
       avatar: user.avatar,
       profession: user.profession,
     },
+    userToken: generateToken(user.id),
   });
 };
