@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // @mui
 import { alpha } from "@mui/material/styles";
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from "@mui/material";
 // mocks_
 import account from "../../../_mock/account";
+import { logout } from "src/features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserDetails } from "src/features/user/userActions";
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +28,16 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover(props) {
+	const { userInfo, userToken } = useSelector((state) => state.user);
+	const dispatch = useDispatch();
 	const [open, setOpen] = useState(null);
+
+	// automatically authenticate user if token is found
+	useEffect(() => {
+		if (userToken) {
+			dispatch(getUserDetails());
+		}
+	}, [userToken, dispatch]);
 
 	const handleOpen = (event) => {
 		setOpen(event.currentTarget);
@@ -97,7 +109,7 @@ export default function AccountPopover(props) {
 
 				<Divider sx={{ borderStyle: "dashed" }} />
 
-				<MenuItem onClick={handleClose} sx={{ m: 1 }}>
+				<MenuItem onClick={() => dispatch(logout())} sx={{ m: 1 }}>
 					Logout
 				</MenuItem>
 			</Popover>
