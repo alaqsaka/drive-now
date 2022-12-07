@@ -48,6 +48,7 @@ export default function App() {
 							<Route path="transaksi" element={<Transaksi />} />
 						</Route>
 					</Route>
+					<Route path="*" element={<Page404 />} />
 				</Routes>
 				{/* <Router isLoggedIn={userInfo} /> */}
 			</ConfirmProvider>
