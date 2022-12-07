@@ -24,6 +24,7 @@ import Transaksi from "./pages/transaksi/Transaksi";
 import Lokasi from "./pages/lokasi/Lokasi";
 import LokasiForm from "./pages/lokasi/LokasiForm";
 import LokasiDetails from "./pages/lokasi/LokasiDetails";
+import TransaksiDetails from "./pages/transaksi/TransaksiDetails";
 // import UserPage from "./pages/UserPage";
 
 // ----------------------------------------------------------------------
@@ -42,10 +43,26 @@ export default function App() {
 						<Route path="/dashboard" element={<DashboardLayout />}>
 							<Route element={<Navigate to="/dashboard/app" />} index />
 							<Route path="app" element={<DashboardAppPage />} />
-							<Route path="user" element={<UserPage />} />
-							<Route path="mobil" element={<Mobil />} />
-							<Route path="lokasi" element={<Lokasi />} />
-							<Route path="transaksi" element={<Transaksi />} />
+							<Route path="user">
+								<Route index element={<UserPage />} />
+								<Route path="detail/:userId" element={<PenggunaDetails />} />
+							</Route>
+							<Route path="mobil">
+								<Route index element={<Mobil />} />
+								<Route path="add" element={<MobilForm />} />
+								<Route path="detail/:slug" element={<MobilDetails />} />
+								<Route path="edit/:carId" element={<MobilForm />} />
+							</Route>
+
+							<Route path="lokasi">
+								<Route index element={<Lokasi />} />
+								<Route path="add" element={<LokasiForm />} />
+								<Route path="detail/:lokasiId" element={<LokasiDetails />} />
+							</Route>
+							<Route path="transaksi">
+								<Route index element={<Transaksi />} />
+								<Route path="detail/:id" element={<TransaksiDetails />} />
+							</Route>
 						</Route>
 					</Route>
 					<Route path="*" element={<Page404 />} />
