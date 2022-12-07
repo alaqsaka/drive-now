@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { userLogin } from "./userActions";
+import { getUserDetails, userLogin } from "./userActions";
 
 // initialize userToken from local storage
 const userToken = localStorage.getItem("userToken") ? localStorage.getItem("userToken") : null;
@@ -30,6 +30,16 @@ const userSlice = createSlice({
 		[userLogin.rejected]: (state, { payload }) => {
 			state.loading = false;
 			state.error = payload;
+		},
+		[getUserDetails.pending]: (state) => {
+			state.loading = true;
+		},
+		[getUserDetails.fulfilled]: (state, { payload }) => {
+			state.loading = false;
+			state.userInfo = payload;
+		},
+		[getUserDetails.rejected]: (state, { payload }) => {
+			state.loading = false;
 		},
 	},
 });

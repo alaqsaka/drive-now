@@ -34,6 +34,7 @@ export const userLogin = createAsyncThunk(
 );
 
 export const getUserDetails = createAsyncThunk("user/getUserDetails", async (arg, { getState, rejectWithValue }) => {
+	console.log("get user detailss");
 	try {
 		// get user data from store
 		const { user } = getState();
@@ -44,7 +45,7 @@ export const getUserDetails = createAsyncThunk("user/getUserDetails", async (arg
 				Authorization: `Bearer ${user.userToken}`,
 			},
 		};
-		const { data } = await axios.get(`/api/user/profile`, config);
+		const { data } = await axios.get(`/users/profile`, config);
 		return data;
 	} catch (error) {
 		if (error.response && error.response.data.message) {

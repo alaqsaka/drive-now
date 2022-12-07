@@ -23,7 +23,7 @@ export default function LoginForm() {
 
 	// redirect authenticated user to profile screen
 	useEffect(() => {
-		if (userInfo || userToken) {
+		if (userInfo) {
 			navigate("/dashboard");
 		}
 	}, [navigate, userInfo]);

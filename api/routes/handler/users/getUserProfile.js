@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   if (user) {
     res.json({
       id: user.id,
-      firstName: user.firstName,
+      name: user.name,
       email: user.email,
     });
   } else {

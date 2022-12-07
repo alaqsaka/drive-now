@@ -16,14 +16,16 @@ import Transaksi from "./pages/transaksi/Transaksi";
 import Lokasi from "./pages/lokasi/Lokasi";
 import LokasiForm from "./pages/lokasi/LokasiForm";
 import LokasiDetails from "./pages/lokasi/LokasiDetails";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 // ----------------------------------------------------------------------
 
-export default function Router() {
+export default function Router(isLoggedIn) {
+	console.log(isLoggedIn);
 	const routes = useRoutes([
 		{
 			path: "/dashboard",
-			element: <DashboardLayout />,
+			element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/login" />,
 			children: [
 				{ element: <Navigate to="/dashboard/app" />, index: true },
 				{ path: "app", element: <DashboardAppPage /> },
@@ -33,10 +35,6 @@ export default function Router() {
 				{ path: "transaksi", element: <Transaksi /> },
 				{ path: "lokasi", element: <Lokasi /> },
 			],
-		},
-		{
-			path: "login",
-			element: <LoginPage />,
 		},
 		{
 			element: <SimpleLayout />,
@@ -86,6 +84,14 @@ export default function Router() {
 				},
 				{ path: "edit/:lokasiId", element: <LokasiForm /> },
 				{ path: "detail/:lokasiId", element: <LokasiDetails /> },
+			],
+		},
+		{
+			path: "/",
+			element: !isLoggedIn ? <DashboardLayout /> : <Navigate to="/dashboard/app" />,
+			children: [
+				{ path: "login", element: <LoginPage /> },
+				{ path: "/", element: <Navigate to="/login" /> },
 			],
 		},
 	]);
