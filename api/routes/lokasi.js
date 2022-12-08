@@ -6,5 +6,6 @@ const lokasiHandler = require("./handler/lokasi");
 // Register route
 router.post("/", lokasiHandler.createLokasi);
 router.get("/", lokasiHandler.getAllLokasi);
+router.put("/:id", lokasiHandler.updateLokasi);
 
 module.exports = router;
