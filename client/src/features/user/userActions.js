@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { logout } from "./userSlice";
 
 const backendURL = "http://localhost:5000";
 
@@ -48,10 +49,16 @@ export const getUserDetails = createAsyncThunk("user/getUserDetails", async (arg
 		const { data } = await axios.get(`/users/profile`, config);
 		return data;
 	} catch (error) {
-		if (error.response && error.response.data.message) {
-			return rejectWithValue(error.response.data.message);
+		console.log("errorrr");
+		console.log(error);
+		if (error.response.data.error === "jwt expired") {
+			console.log("jwt abis");
+			logout();
+		}
+		if (error.response && error.response.data.error) {
+			return rejectWithValue(error.response.data.error);
 		} else {
-			return rejectWithValue(error.message);
+			return rejectWithValue("error ", error.message);
 		}
 	}
 });
