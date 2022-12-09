@@ -56,6 +56,7 @@ export default function App() {
 
 							<Route path="lokasi">
 								<Route index element={<Lokasi />} />
+								<Route path="edit/:lokasiId" element={<LokasiForm />} />
 								<Route path="add" element={<LokasiForm />} />
 								<Route path="detail/:lokasiId" element={<LokasiDetails />} />
 							</Route>

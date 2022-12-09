@@ -13,14 +13,58 @@ import {
 	Alert,
 } from "@mui/material";
 import api from "src/api";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 function LokasiForm() {
 	const [open, setOpen] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
+	const [lokasi, setLokasi] = useState({});
+	const { lokasiId } = useParams();
+	const editMode = Boolean(lokasiId);
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		getValues,
+		reset,
+		control,
+	} = useForm({
+		defaultValues: {
+			name: editMode ? lokasi.name : "",
+			description: editMode ? lokasi.description : "",
+			personInChargeName: editMode ? lokasi.personInChargeName : "",
+			personInChargePhone: editMode ? lokasi.personInChargePhone : "",
+		},
+	});
+
+	useEffect(() => {
+		if (editMode) {
+			console.log("edit modee");
+			setLoading(true);
+			try {
+				api
+					.get(`lokasi/${lokasiId}`)
+					.then((res) => {
+						setLokasi(res.data.data);
+						setLoading(false);
+					})
+					.catch((res) => {
+						if (res.response.status === 404) {
+							setError(res.response.data.message);
+						}
+						setLoading(false);
+					});
+				console.log("lokasi ", lokasi);
+			} catch (error) {
+				console.log("errorr", error);
+			}
+			// setLoading(false);
+		}
+	}, []);
 
 	const handleClick = () => {
 		setOpen(true);
@@ -35,15 +79,6 @@ function LokasiForm() {
 		setError("");
 		setSuccess("");
 	};
-
-	const { lokasiId } = useParams();
-	const editMode = Boolean(lokasiId);
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		reset,
-	} = useForm();
 
 	const submitForm = async (data) => {
 		console.log(data);
@@ -86,6 +121,7 @@ function LokasiForm() {
 								<InputLabel shrink>Deskripsi Lokasi</InputLabel>
 								<FormControl fullWidth>
 									<OutlinedInput
+										defaultValue={editMode ? lokasi?.description : ""}
 										error={errors.description?.type === "required"}
 										placeholder="Deskripsi Lokasi"
 										name="description"
@@ -102,6 +138,7 @@ function LokasiForm() {
 								<InputLabel shrink>Nama Penanggungjawab</InputLabel>
 								<FormControl fullWidth>
 									<OutlinedInput
+										defaultValue={editMode ? lokasi?.personInChargeName : ""}
 										error={errors.personInChargeName?.type === "required"}
 										placeholder="Nama Penanggungjawab"
 										name="personInChargeName"
@@ -116,6 +153,7 @@ function LokasiForm() {
 								<InputLabel shrink>Nomor Telepon Penanggungjawab</InputLabel>
 								<FormControl fullWidth>
 									<OutlinedInput
+										defaultValue={editMode ? lokasi?.personInChargePhone : ""}
 										error={errors.personInChargePhone?.type === "required"}
 										placeholder="Nomor Telepon Penanggungjawab"
 										name="personInChargePhone"
