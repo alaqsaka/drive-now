@@ -8,15 +8,56 @@ import {
 	InputLabel,
 	Button,
 	Container,
+	FormHelperText,
+	Snackbar,
+	Alert,
 } from "@mui/material";
-
-import React from "react";
+import api from "src/api";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-// import Card from "../../theme/overrides/Card";
+import { useForm } from "react-hook-form";
 
 function LokasiForm() {
+	const [open, setOpen] = useState(false);
+	const [error, setError] = useState("");
+	const [success, setSuccess] = useState("");
+
+	const handleClick = () => {
+		setOpen(true);
+	};
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpen(false);
+		setError("");
+		setSuccess("");
+	};
+
 	const { lokasiId } = useParams();
 	const editMode = Boolean(lokasiId);
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		reset,
+	} = useForm();
+
+	const submitForm = async (data) => {
+		console.log(data);
+		try {
+			const response = await api.post("/lokasi", data);
+			setSuccess(response.data.status);
+			setOpen(true);
+			reset();
+		} catch (error) {
+			setOpen(true);
+			console.log(error);
+			setError(error.response.data.message);
+		}
+	};
 
 	return (
 		<Container>
@@ -24,35 +65,96 @@ function LokasiForm() {
 				{editMode ? "Edit Lokasi" : "Tambah Lokasi"}
 			</Typography>
 			<Card>
-				<CardContent>
-					<Grid container spacing={2}>
-						<Grid item xs={12} sm={6}>
-							<InputLabel shrink>Model Lokasi</InputLabel>
-							<FormControl fullWidth>
-								<OutlinedInput placeholder="Nama Lokasi" />
-							</FormControl>
+				<form onSubmit={handleSubmit(submitForm)}>
+					<CardContent>
+						<Grid container spacing={2}>
+							<Grid item xs={12} sm={6}>
+								<InputLabel shrink>Lokasi</InputLabel>
+								<FormControl fullWidth>
+									<OutlinedInput
+										error={errors.name?.type === "required"}
+										placeholder="Nama Lokasi"
+										name="name"
+										{...register("name", { required: "Lokasi tidak boleh kosong" })}
+									/>
+									<FormHelperText sx={{ color: "red" }}>
+										{errors.name?.type === "required" && "Nama lokasi Tidak Boleh Kosong"}
+									</FormHelperText>
+								</FormControl>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<InputLabel shrink>Deskripsi Lokasi</InputLabel>
+								<FormControl fullWidth>
+									<OutlinedInput
+										error={errors.description?.type === "required"}
+										placeholder="Deskripsi Lokasi"
+										name="description"
+										{...register("description", { required: "Description lokasi tidak boleh kosong" })}
+									/>
+									<FormHelperText sx={{ color: "red" }}>
+										{errors.description?.type === "required" && "Description lokasi Tidak Boleh Kosong"}
+									</FormHelperText>
+								</FormControl>
+							</Grid>
 						</Grid>
-						<Grid item xs={12} sm={6}>
-							<InputLabel shrink>Deskripsi Lokasi</InputLabel>
-							<FormControl fullWidth>
-								<OutlinedInput placeholder="Deskripsi Lokasi" />
-							</FormControl>
+						<Grid container spacing={2} mt="16px">
+							<Grid item xs={12} sm={6}>
+								<InputLabel shrink>Nama Penanggungjawab</InputLabel>
+								<FormControl fullWidth>
+									<OutlinedInput
+										error={errors.personInChargeName?.type === "required"}
+										placeholder="Nama Penanggungjawab"
+										name="personInChargeName"
+										{...register("personInChargeName", { required: "Nama Penanggungjawab tidak boleh kosong" })}
+									/>
+									<FormHelperText sx={{ color: "red" }}>
+										{errors.personInChargeName?.type === "required" && "Nama Penanggungjawab Tidak Boleh Kosong"}
+									</FormHelperText>
+								</FormControl>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<InputLabel shrink>Nomor Telepon Penanggungjawab</InputLabel>
+								<FormControl fullWidth>
+									<OutlinedInput
+										error={errors.personInChargePhone?.type === "required"}
+										placeholder="Nomor Telepon Penanggungjawab"
+										name="personInChargePhone"
+										{...register("personInChargePhone", {
+											required: "Nomor Telepon Penanggungjawab tidak boleh kosong",
+										})}
+									/>
+									<FormHelperText sx={{ color: "red" }}>
+										{errors.personInChargePhone?.type === "required" && "Nama Penanggungjawab Tidak Boleh Kosong"}
+									</FormHelperText>
+								</FormControl>
+							</Grid>
 						</Grid>
-					</Grid>
-					<Grid container spacing={2} sx={{ marginTop: "16px" }}>
-						<Grid item xs={12} sm={6}>
-							<Button variant="outlined" size="large" fullWidth>
-								Cancel
-							</Button>
+						<Grid container spacing={2} sx={{ marginTop: "16px" }}>
+							<Grid item xs={12} sm={6}>
+								<Button variant="outlined" size="large" fullWidth>
+									Cancel
+								</Button>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<Button variant="contained" type="submit" size="large" fullWidth>
+									{editMode ? "Edit Data Lokasi" : "Buat Data Lokasi"}
+								</Button>
+							</Grid>
 						</Grid>
-						<Grid item xs={12} sm={6}>
-							<Button variant="contained" size="large" fullWidth>
-								{editMode ? "Edit Data Lokasi" : "Buat Data Lokasi"}
-							</Button>
-						</Grid>
-					</Grid>
-				</CardContent>
+					</CardContent>
+				</form>
 			</Card>
+
+			<Snackbar
+				anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+				open={open}
+				autoHideDuration={3000}
+				onClose={handleClose}
+			>
+				<Alert onClose={handleClose} severity={success ? "success" : "error"} sx={{ width: "100%" }}>
+					{success ? success : error}
+				</Alert>
+			</Snackbar>
 		</Container>
 	);
 }

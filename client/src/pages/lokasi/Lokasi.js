@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
 	Card,
@@ -18,13 +18,15 @@ import {
 	TableContainer,
 	TablePagination,
 	Link as MaterialLink,
+	CircularProgress,
 } from "@mui/material";
 import { withStyles } from "@mui/styles";
+import api from "src/api";
 import { useConfirm } from "material-ui-confirm";
 import Iconify from "../../components/iconify";
 import Scrollbar from "../../components/scrollbar";
 import { UserListHead, UserListToolbar } from "../../sections/@dashboard/user";
-import lokasi from "src/_mock/lokasi";
+
 import { Link } from "react-router-dom";
 import { Box } from "@mui/system";
 
@@ -81,7 +83,17 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
 	const confirm = useConfirm();
+	const [loading, setLoading] = useState(false);
 	const [open, setOpen] = useState(null);
+	const [lokasi, setLokasi] = useState([]);
+	useEffect(() => {
+		setLoading(true);
+		api.get(`lokasi`).then((res) => {
+			console.log(res);
+			setLokasi(res.data.data);
+		});
+		setLoading(false);
+	}, []);
 
 	const [page, setPage] = useState(0);
 
@@ -214,52 +226,62 @@ export default function UserPage() {
 									onRequestSort={handleRequestSort}
 									onSelectAllClick={handleSelectAllClick}
 								/>
-								<TableBody>
-									{filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-										const { id, name, deskripsi } = row;
-										const selectedUser = selected.indexOf(name) !== -1;
-
-										return (
-											<TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
-												<StyledTableCell padding="checkbox">
-													<Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
-												</StyledTableCell>
-
-												<StyledTableCell component="th" scope="row" padding="none">
-													<Stack direction="row" alignItems="center" spacing={2}>
-														<Typography variant="subtitle2" noWrap>
-															{id}
-														</Typography>
-													</Stack>
-												</StyledTableCell>
-
-												<StyledTableCell align="left">{name}</StyledTableCell>
-												<StyledTableCell align="left">{deskripsi}</StyledTableCell>
-
-												<StyledTableCell align="left" sx={{ width: "fit-content" }}>
-													<Link to={`detail/${id}`}>
-														<IconButton component={MaterialLink}>
-															<Iconify icon="ic:outline-remove-red-eye" />
-														</IconButton>
-													</Link>
-													<Link to={`edit/${id}`}>
-														<IconButton>
-															<Iconify icon="eva:edit-fill" color="warning.main" />
-														</IconButton>
-													</Link>
-													<IconButton onClick={() => handleClickDelete(name)}>
-														<Iconify icon="eva:trash-2-outline" color="error.main" />
-													</IconButton>
-												</StyledTableCell>
-											</TableRow>
-										);
-									})}
-									{emptyRows > 0 && (
-										<TableRow style={{ height: 53 * emptyRows }}>
-											<StyledTableCell colSpan={6} />
+								{loading || lokasi.length <= 0 ? (
+									<TableBody>
+										<TableRow>
+											<TableCell colSpan={12} sx={{ textAlign: "center" }}>
+												<CircularProgress />
+											</TableCell>
 										</TableRow>
-									)}
-								</TableBody>
+									</TableBody>
+								) : (
+									<TableBody>
+										{filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+											const { id, name, description } = row;
+											const selectedUser = selected.indexOf(name) !== -1;
+
+											return (
+												<TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+													<StyledTableCell padding="checkbox">
+														<Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
+													</StyledTableCell>
+
+													<StyledTableCell component="th" scope="row" padding="none">
+														<Stack direction="row" alignItems="center" spacing={2}>
+															<Typography variant="subtitle2" noWrap>
+																{id}
+															</Typography>
+														</Stack>
+													</StyledTableCell>
+
+													<StyledTableCell align="left">{name}</StyledTableCell>
+													<StyledTableCell align="left">{description}</StyledTableCell>
+
+													<StyledTableCell align="left" sx={{ width: "fit-content" }}>
+														<Link to={`detail/${id}`}>
+															<IconButton component={MaterialLink}>
+																<Iconify icon="ic:outline-remove-red-eye" />
+															</IconButton>
+														</Link>
+														<Link to={`edit/${id}`}>
+															<IconButton>
+																<Iconify icon="eva:edit-fill" color="warning.main" />
+															</IconButton>
+														</Link>
+														<IconButton onClick={() => handleClickDelete(name)}>
+															<Iconify icon="eva:trash-2-outline" color="error.main" />
+														</IconButton>
+													</StyledTableCell>
+												</TableRow>
+											);
+										})}
+										{emptyRows > 0 && (
+											<TableRow style={{ height: 53 * emptyRows }}>
+												<StyledTableCell colSpan={6} />
+											</TableRow>
+										)}
+									</TableBody>
+								)}
 
 								{isNotFound && (
 									<TableBody>
