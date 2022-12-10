@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
 	Card,
@@ -18,13 +18,15 @@ import {
 	TableContainer,
 	TablePagination,
 	Link as MaterialLink,
+	Avatar,
 } from "@mui/material";
 import { withStyles } from "@mui/styles";
 import { useConfirm } from "material-ui-confirm";
 import Iconify from "../../components/iconify";
 import Scrollbar from "../../components/scrollbar";
+import api from "src/api";
 import { UserListHead, UserListToolbar } from "../../sections/@dashboard/user";
-import cars from "../../_mock/cars";
+// import cars from "../../_mock/cars";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/system";
 
@@ -38,8 +40,6 @@ const TABLE_HEAD = [
 	{ id: "id", label: "ID", alignRight: false },
 	{ id: "name", label: "Nama Model", alignRight: false },
 	{ id: "price", label: "Harga Sewa Per Hari", alignRight: false },
-	{ id: "lokasi", label: "Lokasi", alignRight: false },
-	{ id: "jumlah", label: "Jumlah", alignRight: false },
 	{
 		id: "",
 		label: "Action",
@@ -82,9 +82,25 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserPage() {
-	console.log("Cars ", cars);
+	// console.log("Cars ", cars);
 	const confirm = useConfirm();
 	const [open, setOpen] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [mobil, setMobil] = useState([]);
+	const [mobilId, setMobilId] = useState();
+	useEffect(() => {
+		setLoading(true);
+		api.get(`mobil`).then((res) => {
+			console.log(res);
+			console.log("INI LIST MOBIL ", res.data.data);
+			setMobil(res.data.data);
+			// console.log("LIST MOBIL ", mobil);
+		});
+		setLoading(false);
+		console.log("LIST MOBIL ", mobil);
+	}, [mobilId]);
+
+	console.log("MOBIL ", mobil);
 
 	const [page, setPage] = useState(0);
 
@@ -114,7 +130,7 @@ export default function UserPage() {
 
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
-			const newSelecteds = cars.map((n) => n.name);
+			const newSelecteds = mobil.map((n) => n.name);
 			setSelected(newSelecteds);
 			return;
 		}
@@ -150,9 +166,9 @@ export default function UserPage() {
 		setFilterName(event.target.value);
 	};
 
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - cars.length) : 0;
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - mobil?.length) : 0;
 
-	const filteredUsers = applySortFilter(cars, getComparator(order, orderBy), filterName);
+	const filteredUsers = applySortFilter(mobil, getComparator(order, orderBy), filterName);
 	// const filteredUsers = cars;
 
 	const isNotFound = !filteredUsers.length && !!filterName;
@@ -212,62 +228,66 @@ export default function UserPage() {
 									order={order}
 									orderBy={orderBy}
 									headLabel={TABLE_HEAD}
-									rowCount={cars.length}
+									rowCount={mobil?.length}
 									numSelected={selected.length}
 									onRequestSort={handleRequestSort}
 									onSelectAllClick={handleSelectAllClick}
 								/>
-								<TableBody>
-									{filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-										const { id, name, price, lokasi, slug } = row;
-										const selectedUser = selected.indexOf(name) !== -1;
+								{loading ? (
+									<p>Loading ...</p>
+								) : (
+									<>
+										<TableBody>
+											{filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+												const { id, name, price, slug, image } = row;
+												const selectedUser = selected.indexOf(name) !== -1;
 
-										return (
-											<TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
-												<StyledTableCell padding="checkbox">
-													<Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
-												</StyledTableCell>
+												return (
+													<TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+														<StyledTableCell padding="checkbox">
+															<Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
+														</StyledTableCell>
 
-												<StyledTableCell component="th" scope="row" padding="none">
-													<Stack direction="row" alignItems="center" spacing={2}>
-														<Typography variant="subtitle2" noWrap>
-															{id}
-														</Typography>
-													</Stack>
-												</StyledTableCell>
+														<StyledTableCell component="th" scope="row" padding="none">
+															<Stack direction="row" alignItems="center" spacing={2}>
+																<Typography variant="subtitle2" noWrap>
+																	{id}
+																</Typography>
+															</Stack>
+														</StyledTableCell>
 
-												<StyledTableCell align="left">{name}</StyledTableCell>
-												<StyledTableCell align="left">IDR {price},00</StyledTableCell>
-												<StyledTableCell align="left">
-													{lokasi.length > 0 && lokasi.map((item) => <div>{item.nama}</div>)}
-												</StyledTableCell>
-												<StyledTableCell align="left">
-													{lokasi.length > 0 && lokasi.map((item) => <div>{item.jumlah}</div>)}
-												</StyledTableCell>
-												<StyledTableCell align="left" sx={{ width: "fit-content" }}>
-													<Link to={`detail/${slug}`}>
-														<IconButton component={MaterialLink}>
-															<Iconify icon="ic:outline-remove-red-eye" />
-														</IconButton>
-													</Link>
-													<Link to={`edit/${id}`}>
-														<IconButton>
-															<Iconify icon="eva:edit-fill" color="warning.main" />
-														</IconButton>
-													</Link>
-													<IconButton onClick={() => handleClickDelete(name)}>
-														<Iconify icon="eva:trash-2-outline" color="error.main" />
-													</IconButton>
-												</StyledTableCell>
-											</TableRow>
-										);
-									})}
-									{emptyRows > 0 && (
-										<TableRow style={{ height: 53 * emptyRows }}>
-											<StyledTableCell colSpan={6} />
-										</TableRow>
-									)}
-								</TableBody>
+														<StyledTableCell align="left">
+															<Avatar src={`http://localhost:5000/${image}`} />
+															{image}
+															{name}
+														</StyledTableCell>
+														<StyledTableCell align="left">IDR {price},00</StyledTableCell>
+														<StyledTableCell align="left" sx={{ width: "fit-content" }}>
+															<Link to={`detail/${slug}`}>
+																<IconButton component={MaterialLink}>
+																	<Iconify icon="ic:outline-remove-red-eye" />
+																</IconButton>
+															</Link>
+															<Link to={`edit/${id}`}>
+																<IconButton>
+																	<Iconify icon="eva:edit-fill" color="warning.main" />
+																</IconButton>
+															</Link>
+															<IconButton onClick={() => handleClickDelete(name)}>
+																<Iconify icon="eva:trash-2-outline" color="error.main" />
+															</IconButton>
+														</StyledTableCell>
+													</TableRow>
+												);
+											})}
+											{emptyRows > 0 && (
+												<TableRow style={{ height: 53 * emptyRows }}>
+													<StyledTableCell colSpan={6} />
+												</TableRow>
+											)}
+										</TableBody>
+									</>
+								)}
 
 								{isNotFound && (
 									<TableBody>
@@ -298,7 +318,7 @@ export default function UserPage() {
 					<TablePagination
 						rowsPerPageOptions={[5, 10, 25]}
 						component="div"
-						count={cars.length}
+						count={mobil?.length}
 						rowsPerPage={rowsPerPage}
 						page={page}
 						onPageChange={handleChangePage}
