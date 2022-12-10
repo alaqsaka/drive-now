@@ -2,7 +2,6 @@ import {
 	Box,
 	Card,
 	CardContent,
-	CardHeader,
 	Container,
 	Grid,
 	Paper,
@@ -15,8 +14,10 @@ import {
 	Chip,
 	Link as MaterialLink,
 	IconButton,
+	CircularProgress,
 } from "@mui/material";
-import React from "react";
+import api from "src/api";
+import React, { useEffect, useState } from "react";
 import Iconify from "../../components/iconify";
 import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
@@ -55,7 +56,37 @@ const iconStatus = {
 const MobilDetails = () => {
 	console.log("list of routes ", routes);
 	const { slug } = useParams();
+	const [mobil, setMobil] = useState({});
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState();
 	console.log(slug);
+
+	useEffect(() => {
+		setLoading(true);
+		try {
+			api
+				.get(`mobil/${slug}`)
+				.then((res) => {
+					setMobil(res.data.data);
+					setLoading(false);
+				})
+				.catch((res) => {
+					if (res.response.status === 404) {
+						setError(res.response.data.message);
+						setLoading(false);
+					}
+					setLoading(false);
+				});
+			console.log("mobil ", mobil);
+			setLoading(false);
+		} catch (error) {
+			console.log("errorr", error);
+		}
+		// setLoading(false);
+	}, []);
+
+	console.log("DETAIL MOBIL ", mobil);
+
 	return (
 		<>
 			<Helmet>
@@ -63,121 +94,75 @@ const MobilDetails = () => {
 			</Helmet>
 
 			<Container>
-				<Card>
-					<CardContent>
-						<Typography variant="h4" gutterBottom sx={{ textTransform: "capitalize", marginBottom: "16px" }}>
-							{slug.replace("-", " ")}
-						</Typography>
+				{loading ? (
+					<CircularProgress />
+				) : (
+					<>
+						{!error?.length > 0 ? (
+							<>
+								<Card>
+									<CardContent>
+										<Typography variant="h4" gutterBottom sx={{ textTransform: "capitalize", marginBottom: "16px" }}>
+											{slug.replace("-", " ")}
+										</Typography>
 
-						<Grid container>
-							<Grid item xs={12} sm={6}>
-								<img src={carImg} alt="Honda Hrv" loading="lazy" />
-							</Grid>
-							<Grid item xs={12} sm={6}>
-								<Box marginBottom="16px">
-									<Typography variant="h5">Nama Model</Typography>
-									<Typography variant="body1">Honda HRV</Typography>
-								</Box>
-								<Box marginBottom="16px">
-									<Typography variant="h5">ID Mobil</Typography>
-									<Typography variant="body1">12</Typography>
-								</Box>
-								<Box marginBottom="16px">
-									<Typography variant="h5">Deskripsi</Typography>
-									<Typography variant="body1">
-										Penampilannya yang sporty digabung dengan lekuk garisnya yang impresif, berhasil mempertegas
-										karakter SUV yang modern dan menjadi daya tarik utama dari All New Honda HR-V
-									</Typography>
-								</Box>
-								<Box marginBottom="16px">
-									<Typography variant="h5">Harga Harian</Typography>
-									<Typography variant="body1">Rp. 150.000,00</Typography>
-								</Box>
-								<Box marginBottom="16px">
-									<Typography variant="h5">Lokasi dan Jumlah</Typography>
-									<Grid container>
-										<Grid item xs={12} sm={6}>
-											Jakarta
+										<Grid container>
+											<Grid item xs={12} sm={6}>
+												<img src={carImg} alt="Honda Hrv" loading="lazy" />
+											</Grid>
+											<Grid item xs={12} sm={6}>
+												<Box marginBottom="16px">
+													<Typography variant="h5">Nama Model</Typography>
+													<Typography variant="body1">Honda HRV</Typography>
+												</Box>
+												<Box marginBottom="16px">
+													<Typography variant="h5">ID Mobil</Typography>
+													<Typography variant="body1">12</Typography>
+												</Box>
+												<Box marginBottom="16px">
+													<Typography variant="h5">Deskripsi</Typography>
+													<Typography variant="body1">
+														Penampilannya yang sporty digabung dengan lekuk garisnya yang impresif, berhasil mempertegas
+														karakter SUV yang modern dan menjadi daya tarik utama dari All New Honda HR-V
+													</Typography>
+												</Box>
+												<Box marginBottom="16px">
+													<Typography variant="h5">Harga Harian</Typography>
+													<Typography variant="body1">Rp. 150.000,00</Typography>
+												</Box>
+												<Box marginBottom="16px">
+													<Typography variant="h5">Lokasi dan Jumlah</Typography>
+													<Grid container>
+														<Grid item xs={12} sm={6}>
+															Jakarta
+														</Grid>
+														<Grid item xs={12} sm={6}>
+															2
+														</Grid>
+														<Grid item xs={12} sm={6}>
+															Bandung
+														</Grid>
+														<Grid item xs={12} sm={6}>
+															9
+														</Grid>
+														<Grid item xs={12} sm={6}>
+															Bogor
+														</Grid>
+														<Grid item xs={12} sm={6}>
+															15
+														</Grid>
+													</Grid>
+												</Box>
+											</Grid>
 										</Grid>
-										<Grid item xs={12} sm={6}>
-											2
-										</Grid>
-										<Grid item xs={12} sm={6}>
-											Bandung
-										</Grid>
-										<Grid item xs={12} sm={6}>
-											9
-										</Grid>
-										<Grid item xs={12} sm={6}>
-											Bogor
-										</Grid>
-										<Grid item xs={12} sm={6}>
-											15
-										</Grid>
-									</Grid>
-								</Box>
-							</Grid>
-						</Grid>
-
-						<Typography
-							variant="h4"
-							gutterBottom
-							sx={{ textTransform: "capitalize", marginBottom: "16px", marginTop: "16px" }}
-						>
-							Daftar Transaksi {slug.replace("-", " ")}
-						</Typography>
-
-						<TableContainer component={Paper} variant="outlined" sx={{ border: "1px solid", borderColor: "grey.400" }}>
-							<Table sx={{ minWidth: 650 }} aria-label="simple table">
-								<TableHead>
-									<TableRow>
-										<DNTableCell align="left">ID Transaksi</DNTableCell>
-										<DNTableCell align="left">Nama</DNTableCell>
-										<DNTableCell align="left">Email</DNTableCell>
-										<DNTableCell align="left">Telepon</DNTableCell>
-										<DNTableCell align="left">Tanggal</DNTableCell>
-										<DNTableCell align="left">Status Pembayaran</DNTableCell>
-										<DNTableCell align="left">Total</DNTableCell>
-										<DNTableCell align="left">Action</DNTableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{rows.map((row) => (
-										<TableRow key={row.name} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-											<DNTableCell align="left">{row.id}</DNTableCell>
-											<DNTableCell align="left">{row.nama}</DNTableCell>
-											<DNTableCell align="left">{row.email}</DNTableCell>
-											<DNTableCell align="left">{row.telepon}</DNTableCell>
-											<DNTableCell align="left">{row.tanggal}</DNTableCell>
-											<DNTableCell align="left">
-												<Chip
-													sx={{
-														backgroundColor: badgeColor[row.status],
-														color: badgeColorText[row.status],
-														fontWeight: 600,
-														".MuiChip-icon": {
-															color: badgeColorText[row.status],
-														},
-													}}
-													icon={<Iconify icon={iconStatus[row.status]} />}
-													label={row.status}
-												/>
-											</DNTableCell>
-											<DNTableCell align="left">IDR {row.total},00</DNTableCell>
-											<DNTableCell>
-												<Link to={`/transaction/detail/${row.id}`}>
-													<IconButton component={MaterialLink}>
-														<Iconify icon="ic:outline-remove-red-eye" />
-													</IconButton>
-												</Link>
-											</DNTableCell>
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						</TableContainer>
-					</CardContent>
-				</Card>
+									</CardContent>
+								</Card>
+							</>
+						) : (
+							<p>Tidak ditemukan</p>
+						)}
+					</>
+				)}
 			</Container>
 		</>
 	);

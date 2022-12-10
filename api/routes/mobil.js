@@ -19,6 +19,7 @@ const mobilHandler = require("./handler/mobil");
 // Register route
 router.post("/", upload, mobilHandler.createMobil);
 router.get("/", mobilHandler.getAllMobil);
+router.get("/:id", mobilHandler.getMobil);
 // router.put("/:id", mobilHandler.updateMobil);
 // router.get("/:id", mobilHandler.getMobil);
 // router.delete("/:id", mobilHandler.deleteMobil);
