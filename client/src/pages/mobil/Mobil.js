@@ -258,7 +258,6 @@ export default function UserPage() {
 
 														<StyledTableCell align="left">
 															<Avatar src={`http://localhost:5000/${image}`} />
-															{image}
 															{name}
 														</StyledTableCell>
 														<StyledTableCell align="left">IDR {price},00</StyledTableCell>
