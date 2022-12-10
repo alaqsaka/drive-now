@@ -86,6 +86,7 @@ export default function UserPage() {
 	const [loading, setLoading] = useState(false);
 	const [open, setOpen] = useState(null);
 	const [lokasi, setLokasi] = useState([]);
+	const [lokasiId, setLokasiId] = useState();
 	useEffect(() => {
 		setLoading(true);
 		api.get(`lokasi`).then((res) => {
@@ -93,7 +94,7 @@ export default function UserPage() {
 			setLokasi(res.data.data);
 		});
 		setLoading(false);
-	}, []);
+	}, [lokasiId]);
 
 	const [page, setPage] = useState(0);
 
@@ -166,14 +167,14 @@ export default function UserPage() {
 
 	const isNotFound = !filteredUsers.length && !!filterName;
 
-	const handleClickDelete = (lokasi) => {
+	const handleClickDelete = (id, nama) => {
 		confirm({
 			description: "",
 			title: "",
 			content: (
 				<>
 					<Box>
-						<Typography variant="h5">Yakin menghapus lokasi {lokasi}?</Typography>
+						<Typography variant="h5">Yakin menghapus lokasi {nama}?</Typography>
 						<Typography variant="body1">Data yang sudah dihapus tidak akan dipulihkan kembali</Typography>
 					</Box>
 				</>
@@ -181,6 +182,9 @@ export default function UserPage() {
 		})
 			.then(() => {
 				console.log("Delete");
+				let response = api.delete(`/lokasi/${id}`);
+				console.log("delete response ", response);
+				setLokasiId(id);
 			})
 			.catch(() => {
 				console.log("Cancel delete");
@@ -226,7 +230,7 @@ export default function UserPage() {
 									onRequestSort={handleRequestSort}
 									onSelectAllClick={handleSelectAllClick}
 								/>
-								{loading || lokasi.length <= 0 ? (
+								{loading ? (
 									<TableBody>
 										<TableRow>
 											<TableCell colSpan={12} sx={{ textAlign: "center" }}>
@@ -268,7 +272,7 @@ export default function UserPage() {
 																<Iconify icon="eva:edit-fill" color="warning.main" />
 															</IconButton>
 														</Link>
-														<IconButton onClick={() => handleClickDelete(name)}>
+														<IconButton onClick={() => handleClickDelete(id, name)}>
 															<Iconify icon="eva:trash-2-outline" color="error.main" />
 														</IconButton>
 													</StyledTableCell>
@@ -283,28 +287,24 @@ export default function UserPage() {
 									</TableBody>
 								)}
 
-								{isNotFound && (
-									<TableBody>
-										<TableRow>
-											<TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-												<Paper
-													sx={{
-														textAlign: "center",
-													}}
-												>
-													<Typography variant="h6" paragraph>
-														Not found
-													</Typography>
-													<Typography variant="body2">
-														No results found for &nbsp;
-														<strong>&quot;{filterName}&quot;</strong>.
-														<br /> Try checking for typos or using complete words.
-													</Typography>
-												</Paper>
-											</TableCell>
-										</TableRow>
-									</TableBody>
-								)}
+								{isNotFound ||
+									(lokasi.length === 0 && (
+										<TableBody>
+											<TableRow>
+												<TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+													<Paper
+														sx={{
+															textAlign: "center",
+														}}
+													>
+														<Typography variant="h6" paragraph>
+															Data tidak tersedia
+														</Typography>
+													</Paper>
+												</TableCell>
+											</TableRow>
+										</TableBody>
+									))}
 							</Table>
 						</TableContainer>
 					</Scrollbar>

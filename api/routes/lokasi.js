@@ -8,5 +8,6 @@ router.post("/", lokasiHandler.createLokasi);
 router.get("/", lokasiHandler.getAllLokasi);
 router.put("/:id", lokasiHandler.updateLokasi);
 router.get("/:id", lokasiHandler.getLokasi);
+router.delete("/:id", lokasiHandler.deleteLokasi);
 
 module.exports = router;
