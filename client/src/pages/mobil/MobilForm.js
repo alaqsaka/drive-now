@@ -59,52 +59,6 @@ function MobilForm() {
 							</FormControl>
 						</Grid>
 					</Grid>
-					<Grid container spacing={2} sx={{ marginTop: "16px" }} justifyContent="flex-end">
-						<Grid item>
-							<Button variant="contained" size="small">
-								Tambah Lokasi
-							</Button>
-						</Grid>
-					</Grid>
-					<Grid container spacing={2} sx={{ marginTop: "16px" }}>
-						<Grid item xs={12} sm={6}>
-							<InputLabel shrink>Lokasi</InputLabel>
-							<FormControl fullWidth>
-								<Select
-									labelId="demo-simple-select-label"
-									id="demo-simple-select"
-									// value={age}
-									// label="Lokasi"
-									input={<OutlinedInput />}
-									placeholder="Pilih lokasi"
-									// onChange={handleChange}
-									renderValue={(selected) => {
-										if (selected.length === 0) {
-											return <em>Placeholder</em>;
-										}
-
-										return selected.join(", ");
-									}}
-								>
-									<MenuItem disabled value="">
-										<em>Placeholder</em>
-									</MenuItem>
-									<MenuItem value={1}>Jakarta</MenuItem>
-									<MenuItem value={2}>Tangerang Selatan</MenuItem>
-									<MenuItem value={3}>Bandung</MenuItem>
-								</Select>
-							</FormControl>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<InputLabel shrink>Jumlah</InputLabel>
-							<FormControl fullWidth>
-								<OutlinedInput
-									inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-									placeholder="Jumlah ketersediaan mobil"
-								/>
-							</FormControl>
-						</Grid>
-					</Grid>
 
 					<Grid container spacing={2} sx={{ marginTop: "16px" }}>
 						<Grid item xs={12} sm={6}>
