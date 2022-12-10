@@ -11,6 +11,7 @@ import {
 	FormHelperText,
 	Snackbar,
 	Alert,
+	TextField,
 } from "@mui/material";
 import api from "src/api";
 import React, { useState, useEffect } from "react";
@@ -29,9 +30,8 @@ function LokasiForm() {
 		register,
 		handleSubmit,
 		formState: { errors },
-		getValues,
+
 		reset,
-		control,
 	} = useForm({
 		defaultValues: {
 			name: editMode ? lokasi.name : "",
@@ -64,7 +64,11 @@ function LokasiForm() {
 			}
 			// setLoading(false);
 		}
+
+		console.log("lokasi useefect ", lokasi);
 	}, []);
+
+	console.log("lokasii", lokasi);
 
 	const handleClick = () => {
 		setOpen(true);
@@ -102,14 +106,16 @@ function LokasiForm() {
 			<Card>
 				<form onSubmit={handleSubmit(submitForm)}>
 					<CardContent>
+						{editMode ? lokasi.name : ""}
 						<Grid container spacing={2}>
 							<Grid item xs={12} sm={6}>
 								<InputLabel shrink>Lokasi</InputLabel>
 								<FormControl fullWidth>
+									{lokasi.name}
+									<TextField defaultValue={`${lokasi.name}`} />
 									<OutlinedInput
 										error={errors.name?.type === "required"}
 										placeholder="Nama Lokasi"
-										name="name"
 										{...register("name", { required: "Lokasi tidak boleh kosong" })}
 									/>
 									<FormHelperText sx={{ color: "red" }}>

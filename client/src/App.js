@@ -40,6 +40,7 @@ export default function App() {
 					<Route path="/login" element={<LoginPage />} />
 
 					<Route element={<ProtectedRoute />}>
+						<Route path="/" element={<Navigate to="/dashboard/app" />} />
 						<Route path="/dashboard" element={<DashboardLayout />}>
 							<Route element={<Navigate to="/dashboard/app" />} index />
 							<Route path="app" element={<DashboardAppPage />} />
