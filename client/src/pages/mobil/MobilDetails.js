@@ -105,7 +105,6 @@ const MobilDetails = () => {
 										<Typography variant="h4" gutterBottom sx={{ textTransform: "capitalize", marginBottom: "16px" }}>
 											{slug.replace("-", " ")}
 										</Typography>
-
 										<Grid container>
 											<Grid item xs={12} sm={6}>
 												<img src={carImg} alt="Honda Hrv" loading="lazy" />
@@ -113,45 +112,27 @@ const MobilDetails = () => {
 											<Grid item xs={12} sm={6}>
 												<Box marginBottom="16px">
 													<Typography variant="h5">Nama Model</Typography>
-													<Typography variant="body1">Honda HRV</Typography>
+													<Typography variant="body1">{mobil.name}</Typography>
 												</Box>
 												<Box marginBottom="16px">
 													<Typography variant="h5">ID Mobil</Typography>
-													<Typography variant="body1">12</Typography>
+													<Typography variant="body1">{mobil.id}</Typography>
 												</Box>
 												<Box marginBottom="16px">
 													<Typography variant="h5">Deskripsi</Typography>
-													<Typography variant="body1">
-														Penampilannya yang sporty digabung dengan lekuk garisnya yang impresif, berhasil mempertegas
-														karakter SUV yang modern dan menjadi daya tarik utama dari All New Honda HR-V
-													</Typography>
+													<Typography variant="body1">{mobil.description}</Typography>
 												</Box>
 												<Box marginBottom="16px">
 													<Typography variant="h5">Harga Harian</Typography>
-													<Typography variant="body1">Rp. 150.000,00</Typography>
+													<Typography variant="body1">Rp. {mobil.price}</Typography>
 												</Box>
 												<Box marginBottom="16px">
-													<Typography variant="h5">Lokasi dan Jumlah</Typography>
-													<Grid container>
-														<Grid item xs={12} sm={6}>
-															Jakarta
-														</Grid>
-														<Grid item xs={12} sm={6}>
-															2
-														</Grid>
-														<Grid item xs={12} sm={6}>
-															Bandung
-														</Grid>
-														<Grid item xs={12} sm={6}>
-															9
-														</Grid>
-														<Grid item xs={12} sm={6}>
-															Bogor
-														</Grid>
-														<Grid item xs={12} sm={6}>
-															15
-														</Grid>
-													</Grid>
+													<Typography variant="h5">Tipe Bensin</Typography>
+													<Typography variant="body1">{mobil.fuelType}</Typography>
+												</Box>
+												<Box marginBottom="16px">
+													<Typography variant="h5">Jumlah Kursi</Typography>
+													<Typography variant="body1">{mobil.totalSeat}</Typography>
 												</Box>
 											</Grid>
 										</Grid>

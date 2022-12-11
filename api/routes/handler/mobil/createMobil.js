@@ -5,35 +5,38 @@ const isBase64 = require("is-base64");
 const base64Img = require("base64-img");
 // const image = require('../../../images')
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, res) => {
   // console.log(object);
-  console.log(req.file);
-  console.log(req.file.filename);
-
-  const imageUrl = `images/${req.file.filename}`;
-  console.log("IMAGE URL", imageUrl);
+  // console.log(req);
+  console.log("REQ FILE ", req.file);
+  console.log(req.body);
+  // console.log(req.file.name);
 
   if (!req.file) {
     return res.status(404).json({ message: "Image not found" });
   }
 
-  const schema = {
-    name: "string|empty:false",
-    description: "string|empty:false",
-    totalSeat: "string|empty:false",
-    price: "string|empty:false",
-    fuelType: "string|empty:false",
-    image: "string|empty:false",
-  };
+  const imageUrl = `images/${req.file.filename}`;
+  console.log(imageUrl);
+  // console.log("IMAGE URL", imageUrl);
 
-  // const validate = v.validate(req.body, schema);
+  // const schema = {
+  //   name: "string|empty:false",
+  //   description: "string|empty:false",
+  //   totalSeat: "string|empty:false",
+  //   price: "string|empty:false",
+  //   fuelType: "string|empty:false",
+  //   image: "string|empty:false",
+  // };
 
-  // if (validate.length) {
-  //   return res.status(400).json({
-  //     status: "error",
-  //     message: validate,
-  //   });
-  // }
+  // // const validate = v.validate(req.body, schema);
+
+  // // if (validate.length) {
+  // //   return res.status(400).json({
+  // //     status: "error",
+  // //     message: validate,
+  // //   });
+  // // }
 
   const mobil = await Mobil.findOne({
     where: {
@@ -47,8 +50,6 @@ module.exports = async (req, res, next) => {
       message: "Mobil dengan nama ini sudah terdaftar",
     });
   }
-
-  // console.log("filename", filename);
 
   const mobilSlug = req.body.name
     .toLowerCase()
@@ -65,7 +66,7 @@ module.exports = async (req, res, next) => {
     slug: mobilSlug,
   });
 
-  console.log("createmobil ", createMobil);
+  // console.log("createmobil ", createMobil);
 
   return res.status(200).json({
     status: "success",

@@ -124,8 +124,16 @@ function LokasiForm() {
 									<InputLabel shrink>Lokasi</InputLabel>
 									<Controller
 										name="name"
+										rules={{ required: true }}
 										control={control}
-										render={({ field }) => <OutlinedInput placeholder="Nama Lokasi" {...field} fullWidth />}
+										render={({ field }) => (
+											<OutlinedInput
+												error={errors.name?.type === "required"}
+												placeholder="Nama Lokasi"
+												{...field}
+												fullWidth
+											/>
+										)}
 									/>
 									<FormControl fullWidth>
 										<FormHelperText sx={{ color: "red" }}>
