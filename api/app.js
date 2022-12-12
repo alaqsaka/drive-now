@@ -10,6 +10,7 @@ const usersRouter = require("./routes/users");
 const lokasiRouter = require("./routes/lokasi");
 const mobilRouter = require("./routes/mobil");
 const refreshTokensRouter = require("./routes/refreshTokens");
+const costumerRouter = require("./routes/customers");
 
 // CORS
 
@@ -34,6 +35,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/lokasi", lokasiRouter);
 app.use("/mobil", mobilRouter);
+app.use("/customers", costumerRouter);
 app.use("/refresh_tokens", refreshTokensRouter);
 
 module.exports = app;
