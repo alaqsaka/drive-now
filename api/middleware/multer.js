@@ -28,7 +28,7 @@ const uploadMultiple = multer({
 // Set storage engine
 const storage = multer.diskStorage({
   destination: "public/images",
-  filename: function (req, file, cb) {
+  filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });

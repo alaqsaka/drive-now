@@ -9,12 +9,14 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const lokasiRouter = require("./routes/lokasi");
 const mobilRouter = require("./routes/mobil");
+const transactionRouter = require("./routes/transactions");
 const refreshTokensRouter = require("./routes/refreshTokens");
 const costumerRouter = require("./routes/customers");
 
 // CORS
 
 const app = express();
+
 app.use(
   cors({
     origin: "*",
@@ -36,6 +38,7 @@ app.use("/users", usersRouter);
 app.use("/lokasi", lokasiRouter);
 app.use("/mobil", mobilRouter);
 app.use("/customers", costumerRouter);
+app.use("/transactions", transactionRouter);
 app.use("/refresh_tokens", refreshTokensRouter);
 
 module.exports = app;

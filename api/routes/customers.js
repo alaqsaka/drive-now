@@ -5,8 +5,8 @@ const customersHandler = require("./handler/customers");
 
 // Register route
 router.post("/register", customersHandler.register);
-// router.post("/login", customersHandler.login);
-// router.get("/profile", protect, customersHandler.getUserProfile);
+router.post("/login", customersHandler.login);
+router.get("/profile", protect, customersHandler.getCustomerProfile);
 // router.put("/:id", customersHandler.update);
 // router.get("/:id", customersHandler.getUser);
 // router.get("/", customersHandler.getcustomers);

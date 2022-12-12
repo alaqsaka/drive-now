@@ -30,6 +30,7 @@ function MobilForm() {
 	const [success, setSuccess] = useState("");
 	const [preview, setPreview] = useState("");
 	const [file, setFile] = useState("");
+	const [name, setName] = useState("");
 
 	const {
 		register,

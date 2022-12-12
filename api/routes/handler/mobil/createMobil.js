@@ -12,31 +12,31 @@ module.exports = async (req, res) => {
   console.log(req.body);
   // console.log(req.file.name);
 
+  // console.log("IMAGE URL", imageUrl);
+
+  const schema = {
+    name: "string|empty:false",
+    description: "string|empty:false",
+    totalSeat: "string|empty:false",
+    price: "string|empty:false",
+    fuelType: "string|empty:false",
+    image: "string|empty:false",
+  };
+
+  const validate = v.validate(req.body, schema);
+
+  if (validate.length) {
+    return res.status(400).json({
+      status: "error",
+      message: validate,
+    });
+  }
+
   if (!req.file) {
     return res.status(404).json({ message: "Image not found" });
   }
 
   const imageUrl = `images/${req.file.filename}`;
-  console.log(imageUrl);
-  // console.log("IMAGE URL", imageUrl);
-
-  // const schema = {
-  //   name: "string|empty:false",
-  //   description: "string|empty:false",
-  //   totalSeat: "string|empty:false",
-  //   price: "string|empty:false",
-  //   fuelType: "string|empty:false",
-  //   image: "string|empty:false",
-  // };
-
-  // // const validate = v.validate(req.body, schema);
-
-  // // if (validate.length) {
-  // //   return res.status(400).json({
-  // //     status: "error",
-  // //     message: validate,
-  // //   });
-  // // }
 
   const mobil = await Mobil.findOne({
     where: {
