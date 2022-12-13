@@ -13,6 +13,7 @@ import {
 	Button,
 	Container,
 	FormHelperText,
+	TextField,
 } from "@mui/material";
 import { InputUnstyled } from "@mui/base";
 import React, { useState, useEffect } from "react";
@@ -31,6 +32,10 @@ function MobilForm() {
 	const [preview, setPreview] = useState("");
 	const [file, setFile] = useState("");
 	const [name, setName] = useState("");
+	const [totalSeat, setTotalSeat] = useState("");
+	const [fuelType, setFuelType] = useState("");
+	const [price, setPrice] = useState("");
+	const [description, setDescription] = useState("");
 
 	const {
 		register,
@@ -70,26 +75,26 @@ function MobilForm() {
 				// data["image"] = file;
 				// console.log("file image ", file);
 				const formData = new FormData();
-				console.log("data ", ...data["name"]);
-				formData.append("name", data["name"]);
-				formData.append("price", data["price"]);
-				formData.append("description", data["description"]);
-				formData.append("fuelType", data["fuelType"]);
-				formData.append("totalSeat", data["totalSeat"]);
-				formData.append("file", file);
+
+				formData.append("name", name);
+				formData.append("price", price);
+				formData.append("description", description);
+				formData.append("fuelType", fuelType);
+				formData.append("totalSeat", totalSeat);
+				formData.append("image", file);
 				// console.log(first)
 				console.log("FORM DATA", formData);
 				console.log(file);
 				console.log("image data", data["image"]);
 				setValue("image", file);
 				console.log("Dataa ", data);
-				const response = await api.post("/mobil", data, {
+				const response = await api.post("/mobil", formData, {
 					headers: {
 						"Content-type": "multipart/form-data",
 					},
 				});
 				console.log("add mobil response  ", response);
-				// setSuccess(response.data.status);
+				setSuccess(response.data.status);
 				setOpen(true);
 				setPreview(false);
 				// reset();
@@ -124,7 +129,8 @@ function MobilForm() {
 							<Grid item xs={12} sm={6}>
 								<InputLabel shrink>Model Mobil</InputLabel>
 								<FormControl fullWidth>
-									<Controller
+									<TextField onChange={(e) => setName(e.target.value)} />
+									{/* <Controller
 										name="name"
 										rules={{ required: true }}
 										control={control}
@@ -136,7 +142,7 @@ function MobilForm() {
 												fullWidth
 											/>
 										)}
-									/>
+									/> */}
 									<FormHelperText sx={{ color: "red" }}>
 										{errors.name?.type === "required" && "Nama lokasi Tidak Boleh Kosong"}
 									</FormHelperText>
@@ -145,13 +151,14 @@ function MobilForm() {
 							<Grid item xs={12} sm={6}>
 								<InputLabel shrink>Harga per hari</InputLabel>
 								<FormControl fullWidth>
-									<OutlinedInput
+									<TextField onChange={(e) => setPrice(e.target.value)} />
+									{/* <OutlinedInput
 										// defaultValue={editMode ? lokasi?.description : ""}
 										error={errors.price?.type === "required"}
 										placeholder="Harga Sewa Mobil"
 										name="price"
 										{...register("price", { required: "Harga sewa mobil tidak boleh kosong" })}
-									/>
+									/> */}
 									<FormHelperText sx={{ color: "red" }}>
 										{errors.price?.type === "required" && "Harga sewa mobil Tidak Boleh Kosong"}
 									</FormHelperText>
@@ -162,14 +169,16 @@ function MobilForm() {
 						<Grid container spacing={2} sx={{ marginTop: "16px" }}>
 							<Grid item xs={12} sm={6}>
 								<InputLabel shrink>Jumlah Kursi</InputLabel>
+
 								<FormControl fullWidth>
-									<OutlinedInput
+									<TextField onChange={(e) => setTotalSeat(e.target.value)} />
+									{/* <OutlinedInput
 										// defaultValue={editMode ? lokasi?.description : ""}
 										error={errors.totalSeat?.type === "required"}
 										placeholder="Jumlah Kursi Mobil"
 										name="totalSeat"
 										{...register("totalSeat", { required: "Jumlah kursi mobil tidak boleh kosong" })}
-									/>
+									/> */}
 									<FormHelperText sx={{ color: "red" }}>
 										{errors.totalSeat?.type === "required" && "Jumlah kursi mobil Tidak Boleh Kosong"}
 									</FormHelperText>
@@ -178,13 +187,14 @@ function MobilForm() {
 							<Grid item xs={12} sm={6}>
 								<InputLabel shrink>Detail Mobil</InputLabel>
 								<FormControl fullWidth>
-									<OutlinedInput
+									<TextField onChange={(e) => setDescription(e.target.value)} />
+									{/* <OutlinedInput
 										// defaultValue={editMode ? lokasi?.description : ""}
 										error={errors.description?.type === "required"}
 										placeholder="Deskripsi Mobil"
 										name="description"
 										{...register("description", { required: "Description mobil tidak boleh kosong" })}
-									/>
+									/> */}
 									<FormHelperText sx={{ color: "red" }}>
 										{errors.description?.type === "required" && "Description mobil Tidak Boleh Kosong"}
 									</FormHelperText>
@@ -196,13 +206,14 @@ function MobilForm() {
 							<Grid item xs={12} sm={6}>
 								<InputLabel shrink>Jenis Bensin</InputLabel>
 								<FormControl fullWidth>
-									<OutlinedInput
+									<TextField onChange={(e) => setFuelType(e.target.value)} />
+									{/* <OutlinedInput
 										// defaultValue={editMode ? lokasi?.description : ""}
 										error={errors.fuelType?.type === "required"}
 										placeholder="Jenis Bensin Mobil"
 										name="fuelType"
 										{...register("fuelType", { required: "Jenis Bensin mobil tidak boleh kosong" })}
-									/>
+									/> */}
 									<FormHelperText sx={{ color: "red" }}>
 										{errors.fuelType?.type === "required" && "Jenis Bensin mobil tidak Boleh Kosong"}
 									</FormHelperText>
